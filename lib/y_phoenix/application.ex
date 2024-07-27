@@ -14,7 +14,6 @@ defmodule YPhoenix.Application do
       {Phoenix.PubSub, name: YPhoenix.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: YPhoenix.Finch},
-      {YPhoenix.SharedDocSupervisor, pg_scope: :shared_doc_pg_scope},
       # Start a worker by calling: YPhoenix.Worker.start_link(arg)
       # {YPhoenix.Worker, arg},
       # Start to serve requests, typically the last entry

@@ -36,6 +36,7 @@ defmodule YPhoenix.MixProject do
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
+      {:ecto_psql_extras, "~> 0.6"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       # TODO bump on release to {:phoenix_live_view, "~> 1.0.0"},
@@ -60,7 +61,7 @@ defmodule YPhoenix.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:rustler, ">= 0.34.0"},
-      {:y_ex, ">= 0.4.0"}
+      {:y_ex, path: "/Users/masataka/projects/oss/y_ex"}
     ]
   end
 

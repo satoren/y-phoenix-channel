@@ -103,6 +103,20 @@ const setupChannel = (provider: PhoenixChannelProvider) => {
 
     provider.channel = provider.socket.channel(provider.roomname, provider.params)
 
+    provider.channel.onError(() => {
+      provider.emit('status', [{
+        status: 'disconnected'
+      }])
+      provider.synced = false
+      // update awareness (all users except local left)
+      awarenessProtocol.removeAwarenessStates(
+        provider.awareness,
+        Array.from(provider.awareness.getStates().keys()).filter((client) =>
+          client !== provider.doc.clientID
+        ),
+        provider
+      )
+    })
     provider.channel.onClose(() => {
       provider.emit('status', [{
         status: 'disconnected'
