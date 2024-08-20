@@ -3,7 +3,7 @@ defmodule YPhoenix.MyYEcto do
 end
 
 defmodule YPhoenix.EctoPersistence do
-  Yex.Sync.SharedDoc.PersistenceBehaviour
+  @behaviour Yex.Sync.SharedDoc.PersistenceBehaviour
   @impl true
   def bind(_state, doc_name, doc) do
     ecto_doc = YPhoenix.MyYEcto.get_y_doc(doc_name)
