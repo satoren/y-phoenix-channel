@@ -39,13 +39,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0 
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.8.1
-      - name: Gigalixir Action
-        uses: gigalixir/gigalixir-action@v0.6.1
-        with:
-          GIGALIXIR_APP: y-phoenix
-          GIGALIXIR_USERNAME: ${{ secrets.GIGALIXIR_USERNAME }}
-          GIGALIXIR_PASSWORD: ${{ secrets.GIGALIXIR_PASSWORD }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: git push gigalixir
+        run: |
+          git remote add gigalixir https://${{ secrets.GIGALIXIR_EMAIL }}:${{ secrets.GIGALIXIR_API_KEY }}@git.gigalixir.com/${{ secrets.GIGALIXIR_APP_NAME }}.git
+          git push -f gigalixir HEAD:refs/heads/master
