@@ -9,6 +9,7 @@ defmodule YPhoenixWeb.UserSocket do
   ## Channels
 
   channel "y_doc_room:*", YPhoenixWeb.YDocRoomChannel
+  channel "y_doc_room_memory_save:*", YPhoenixWeb.YDocRoomChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
