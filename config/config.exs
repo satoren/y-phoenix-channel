@@ -36,7 +36,7 @@ config :esbuild,
   version: "0.17.11",
   y_phoenix: [
     args:
-      ~w(js/app.js js/editor.ts --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+      ~w(js/app.js js/quill.ts js/blocknote.tsx --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/* --loader:.woff=file --loader:.woff2=file),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]

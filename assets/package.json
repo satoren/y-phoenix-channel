@@ -9,10 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@blocknote/core": "^0.15.5",
+    "@blocknote/mantine": "^0.15.5",
+    "@blocknote/react": "^0.15.5",
+    "friendly-username-generator": "^2.0.4",
+    "lib0": "^0.2.42",
     "quill": "2.0.2",
     "quill-cursors": "^4.0.3",
-
-    "lib0": "^0.2.42",
     "y-indexeddb": "^9.0.12",
     "y-protocols": "^1.0.6",
     "y-quill": "^1.0.0",

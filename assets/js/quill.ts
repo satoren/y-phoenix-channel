@@ -7,6 +7,7 @@ import { IndexeddbPersistence } from 'y-indexeddb'
 
 import {Socket} from "phoenix"
 import { PhoenixChannelProvider } from "./y-phoenix-channel"
+import { generateUsername } from 'friendly-username-generator';
 
 Quill.register('modules/cursors', QuillCursors)
 const socket = new Socket("/socket")
@@ -35,8 +36,8 @@ const usercolors = [
 ]
 const myColor = usercolors[Math.floor(Math.random() * usercolors.length)]
 provider.awareness.setLocalStateField('user', {
-  name: "user1",
-  color: myColor
+  name:  generateUsername(),
+  color: myColor,
 })
 
 const toolbarOptions = [

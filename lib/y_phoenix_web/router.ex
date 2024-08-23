@@ -17,7 +17,9 @@ defmodule YPhoenixWeb.Router do
   scope "/", YPhoenixWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/", PageController, :quill
+    get "/quill", PageController, :quill
+    get "/blocknote", PageController, :blocknote
   end
 
   # Other scopes may use custom stacks.
