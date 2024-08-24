@@ -14,7 +14,7 @@ export class ExcalidrawBinding {
   constructor(
     yarray: Y.Array<unknown>,
     api: ExcalidrawImperativeAPI,
-    private awareness?: awarenessProtocol.Awareness
+    private awareness?: awarenessProtocol.Awareness,
   ) {
     this.subscriptions.push(
       api.onChange((elements) => {
@@ -30,9 +30,9 @@ export class ExcalidrawBinding {
           if (yarray.length < elements.length) {
             const add = Array.from(
               { length: elements.length - yarray.length },
-              () => new Y.Map()
+              () => new Y.Map(),
             );
-            yarray.insert(yarray.length, add);
+            yarray.push(add);
           } else if (yarray.length > elements.length) {
             yarray.delete(elements.length, yarray.length - elements.length);
           }
@@ -55,7 +55,7 @@ export class ExcalidrawBinding {
             }
           }
         }, "local");
-      })
+      }),
     );
 
     yarray.observeDeep((events, txn) => {
@@ -71,9 +71,9 @@ export class ExcalidrawBinding {
         api.onChange((_, state) => {
           awareness.setLocalStateField(
             "selectedElementIds",
-            state.selectedElementIds
+            state.selectedElementIds,
           );
-        })
+        }),
       );
 
       const awarenessChangeHandler = ({
@@ -160,7 +160,7 @@ export class ExcalidrawAssetsBinding {
             }
           }
         }, "local");
-      })
+      }),
     );
 
     const handler = (events: Y.YMapEvent<unknown>, txn: Y.Transaction) => {
@@ -169,7 +169,7 @@ export class ExcalidrawAssetsBinding {
       }
 
       const addedFiles = [...events.keysChanged].map(
-        (key) => ymap.get(key) as BinaryFileData
+        (key) => ymap.get(key) as BinaryFileData,
       );
       api.addFiles(addedFiles);
     };
