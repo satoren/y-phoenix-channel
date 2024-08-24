@@ -48,8 +48,13 @@ defmodule YPhoenixWeb.YDocRoomChannel do
 
   defp start_shared_doc(doc_name) do
     case :global.whereis_name({__MODULE__, doc_name}) do
-      :undefined -> SharedDoc.start([doc_name: doc_name, persistence: YPhoenix.EctoPersistence], name: {:global, {__MODULE__, doc_name}})
-      pid -> {:ok, pid}
+      :undefined ->
+        SharedDoc.start([doc_name: doc_name, persistence: YPhoenix.EctoPersistence],
+          name: {:global, {__MODULE__, doc_name}}
+        )
+
+      pid ->
+        {:ok, pid}
     end
     |> case do
       {:ok, pid} ->

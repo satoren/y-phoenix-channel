@@ -5,20 +5,20 @@ import { BlockNoteView } from "@blocknote/mantine";
 import * as Y from 'yjs'
 import "@blocknote/mantine/style.css";
 
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { PhoenixChannelProvider } from "./y-phoenix-channel";
 import { IndexeddbPersistence } from "y-indexeddb";
 import { Socket } from "phoenix";
 import { generateUsername } from 'friendly-username-generator';
- 
+
 
 const socket = new Socket("/socket")
 socket.connect()
 const ydoc = new Y.Doc()
-const docname = new URLSearchParams(window.location.search).get('docname') ?? "quill"
+const docname = `blocknote:${new URLSearchParams(window.location.search).get('docname') ?? "blocknote"}`
 
 
-const provider = new PhoenixChannelProvider(socket, `y_doc_room:blocknote${docname}`, ydoc )
+const provider = new PhoenixChannelProvider(socket, `y_doc_room:${docname}`, ydoc)
 const persistence = new IndexeddbPersistence(docname, ydoc)
 
 
@@ -41,17 +41,23 @@ export default function App() {
       provider,
       fragment: ydoc.getXmlFragment("document-store"),
       user: {
-        name:  generateUsername(),
+        name: generateUsername(),
         color: myColor,
       },
     },
     // ...
   });
- 
+
   // Renders the editor instance using a React component.
   return <BlockNoteView editor={editor} theme="light" />;
 }
 
 
+
 const domNode = document.getElementById('root');
-render(<App />, domNode);
+if (!domNode) {
+  throw new Error("root element not found")
+}
+
+const root = createRoot(domNode);
+root.render(<App />);

@@ -16,7 +16,7 @@ socket.connect()
 
 const ydoc = new Y.Doc()
 
-const docname = new URLSearchParams(window.location.search).get('docname') ?? "quill"
+const docname = `quill:${new URLSearchParams(window.location.search).get('docname') ?? "quill"}`
 
 //const channel = socket.channel(`y_doc_room:${docname}`, {})
 //channel.join()

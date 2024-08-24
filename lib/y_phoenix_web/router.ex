@@ -20,6 +20,7 @@ defmodule YPhoenixWeb.Router do
     get "/", PageController, :quill
     get "/quill", PageController, :quill
     get "/blocknote", PageController, :blocknote
+    get "/excalidraw", PageController, :excalidraw
   end
 
   # Other scopes may use custom stacks.
