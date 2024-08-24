@@ -4,10 +4,11 @@
   "description": "",
   "main": "js/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "npx @biomejs/biome format --write ./"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@blocknote/core": "^0.15.5",
     "@blocknote/mantine": "^0.15.5",
@@ -18,6 +19,7 @@
     "lib0": "^0.2.42",
     "quill": "2.0.2",
     "quill-cursors": "^4.0.3",
+    "topbar": "^3.0.0",
     "y-indexeddb": "^9.0.12",
     "y-protocols": "^1.0.6",
     "y-quill": "^1.0.0",
