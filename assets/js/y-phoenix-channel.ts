@@ -4,7 +4,7 @@
 
 /* eslint-env browser */
 
-import * as Y from 'yjs' // eslint-disable-line
+import type * as Y from 'yjs'
 import * as bc from 'lib0/broadcastchannel'
 import * as time from 'lib0/time'
 import * as encoding from 'lib0/encoding'
@@ -137,7 +137,6 @@ const setupChannel = (provider: PhoenixChannelProvider) => {
       provider.wsLastMessageReceived = time.getUnixTime()
       const encoder = readMessage(provider, new Uint8Array(data), true)
       if (encoding.length(encoder) > 1) {
-        console.log("yjs",encoding.toUint8Array(encoder))
         provider.channel?.push("yjs",encoding.toUint8Array(encoder).buffer)
       }
 
@@ -156,7 +155,6 @@ const setupChannel = (provider: PhoenixChannelProvider) => {
       syncProtocol.writeSyncStep1(encoder, provider.doc)
 
       const data = encoding.toUint8Array(encoder)
-      console.log(data)
       provider.channel?.push("yjs_sync", data.buffer)
 
       // broadcast local awareness state
