@@ -26,6 +26,6 @@
   "devDependencies": {
     "@types/phoenix": "1.6.5",
     "@types/react": "18.3.4",
-    "@types/react-dom": "18.0.11"
+    "@types/react-dom": "18.3.0"
   }
 }
