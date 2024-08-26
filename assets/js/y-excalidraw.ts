@@ -6,6 +6,7 @@ import type {
 import * as Y from "yjs";
 import type * as awarenessProtocol from "y-protocols/awareness";
 import deepEqual from "fast-deep-equal";
+import { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
 
 export class ExcalidrawBinding {
   subscriptions: (() => void)[] = [];
@@ -54,17 +55,35 @@ export class ExcalidrawBinding {
               }
             }
           }
-        }, "local");
+        }, this);
       }),
     );
 
-    yarray.observeDeep((events, txn) => {
-      if (txn.origin === "local") {
+    yarray.observeDeep((_events, txn) => {
+      if (txn.origin === this) {
         return;
       }
 
-      api.updateScene({ elements: yarray.toJSON() });
+      const elements = [...api.getSceneElements()];
+
+      for (const map of yarray) {
+        if(!(map instanceof Y.Map)) {
+          continue;
+        }
+        const id = map.get("id");
+        const index = elements.findIndex((elem) => elem.id === id);
+        if (index >= 0) {
+          const version = map.get("version");
+          if(version === elements[index].version) {
+            elements[index] = map.toJSON() as NonDeletedExcalidrawElement;
+          } else {
+            elements.push(map.toJSON() as NonDeletedExcalidrawElement);
+          }
+        }
+      }
     });
+
+    api.updateScene({ elements: yarray.toJSON() });
 
     if (awareness) {
       this.subscriptions.push(
@@ -159,12 +178,12 @@ export class ExcalidrawAssetsBinding {
               ymap.set(key, files[key]);
             }
           }
-        }, "local");
+        }, this);
       }),
     );
 
     const handler = (events: Y.YMapEvent<unknown>, txn: Y.Transaction) => {
-      if (txn.origin === "local") {
+      if (txn.origin === this) {
         return;
       }
 
@@ -177,6 +196,8 @@ export class ExcalidrawAssetsBinding {
     this.subscriptions.push(() => {
       ymap.unobserve(handler);
     });
+
+    api.addFiles([...ymap.keys()].map((key) => ymap.get(key) as BinaryFileData));
   }
   destroy() {
     for (const s of this.subscriptions) {
