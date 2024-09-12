@@ -6,84 +6,138 @@ import type {
 import * as Y from "yjs";
 import type * as awarenessProtocol from "y-protocols/awareness";
 import deepEqual from "fast-deep-equal";
-import { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
+import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
 
 export class ExcalidrawBinding {
   subscriptions: (() => void)[] = [];
   collaborators: Map<string, Collaborator> = new Map();
-  lastVersion: number | undefined = undefined;
   constructor(
-    yarray: Y.Array<unknown>,
+    ymap: Y.Map<unknown>,
     api: ExcalidrawImperativeAPI,
     private awareness?: awarenessProtocol.Awareness,
   ) {
     this.subscriptions.push(
       api.onChange((elements) => {
-        const version = getVersion(elements);
-        if (this.lastVersion === version) {
+        const prevVersions = [...ymap.entries()]
+          .map(([id, v]) => {
+            if (v instanceof Y.Map) {
+              return {
+                id,
+                version: v.get("version"),
+                versionNonce: v.get("versionNonce"),
+              };
+            }
+            return null;
+          })
+          .filter(
+            (v): v is { id: string; version: number; versionNonce: number } =>
+              v != null,
+          );
+
+        const prevVersionsMap = Object.fromEntries(
+          prevVersions.map((elem) => [elem.id, elem]),
+        );
+        const elementMap = Object.fromEntries(
+          elements.map((elem) => [elem.id, elem]),
+        );
+
+        const deleted = prevVersions
+          .filter((el) => elementMap[el.id] == null)
+          .map((el) => el.id);
+        const added = elements
+          .filter((el) => prevVersionsMap[el.id] == null)
+          .map((el) => el.id);
+        const changed = elements
+          .filter((el) => {
+            const prev = prevVersionsMap[el.id];
+            if (!prev) {
+              return false;
+            }
+            return (
+              prev.version !== el.version ||
+              prev.versionNonce !== el.versionNonce
+            );
+          })
+          .map((el) => el.id);
+
+        if (
+          deleted.length === 0 &&
+          added.length === 0 &&
+          changed.length === 0
+        ) {
           return;
         }
-        this.lastVersion = version;
-
-        const doc = yarray.doc;
-
+        const doc = ymap.doc;
         doc?.transact(() => {
-          if (yarray.length < elements.length) {
-            const add = Array.from(
-              { length: elements.length - yarray.length },
-              () => new Y.Map(),
-            );
-            yarray.push(add);
-          } else if (yarray.length > elements.length) {
-            yarray.delete(elements.length, yarray.length - elements.length);
-          }
-
-          for (let i = 0; i < elements.length; i++) {
-            const map = yarray.get(i) as Y.Map<unknown>;
-            const elem = elements[i];
-            if (map.get("version") === elem.version) {
-              continue;
-            }
+          deleted.forEach((id) => {
+            ymap.delete(id);
+          });
+          added.forEach((id) => {
+            const map = ymap.set(id, new Y.Map());
+            const elem = elementMap[id];
 
             for (const [key, value] of Object.entries(elem)) {
-              const src = map.get(key);
-              if (
-                (typeof src === "object" && !deepEqual(map.get(key), value)) ||
-                src !== value
-              ) {
+              map.set(key, value);
+            }
+          });
+          changed.forEach((id) => {
+            const map = ymap.get(id) as Y.Map<unknown> | undefined;
+            const elem = elementMap[id];
+            if (map) {
+              for (const [key, value] of Object.entries(elem)) {
+                const src = map.get(key);
+                if (
+                  (typeof src === "object" &&
+                    !deepEqual(map.get(key), value)) ||
+                  src !== value
+                ) {
+                  map.set(key, value);
+                }
+              }
+            } else {
+              const map = new Y.Map();
+              ymap.set(id, map);
+              const elem = elementMap[id];
+
+              for (const [key, value] of Object.entries(elem)) {
                 map.set(key, value);
               }
             }
-          }
+          });
         }, this);
       }),
     );
 
-    yarray.observeDeep((_events, txn) => {
+    ymap.observeDeep((events, txn) => {
       if (txn.origin === this) {
         return;
       }
-
       const elements = [...api.getSceneElements()];
-
-      for (const map of yarray) {
-        if(!(map instanceof Y.Map)) {
-          continue;
-        }
-        const id = map.get("id");
-        const index = elements.findIndex((elem) => elem.id === id);
-        if (index >= 0) {
-          const version = map.get("version");
-          if(version === elements[index].version) {
-            elements[index] = map.toJSON() as NonDeletedExcalidrawElement;
+      let changed = false;
+      ymap.forEach((map) => {
+        if (map instanceof Y.Map) {
+          const value = map.toJSON() as NonDeletedExcalidrawElement;
+          const id = value.id;
+          const version = value.version;
+          const index = elements.findIndex((e) => e.id === id);
+          if (index >= 0) {
+            if (elements[index].version < version) {
+              elements[index] = map.toJSON() as NonDeletedExcalidrawElement;
+              changed = true;
+            }
           } else {
             elements.push(map.toJSON() as NonDeletedExcalidrawElement);
+            changed = true;
           }
         }
+      });
+      if (changed) {
+        api.updateScene({ elements });
       }
     });
 
-    api.updateScene({ elements: yarray.toJSON() });
+    // set initial
+    api.updateScene({ elements: Object.values(ymap.toJSON()) });
 
     if (awareness) {
       this.subscriptions.push(
@@ -159,12 +213,6 @@ export class ExcalidrawBinding {
   }
 }
 
-function getVersion(elems: readonly { version: number }[]): number {
-  return elems.reduce((acc, curr) => {
-    return curr.version + acc;
-  }, 0);
-}
-
 export class ExcalidrawAssetsBinding {
   subscriptions: (() => void)[] = [];
 
@@ -197,7 +245,10 @@ export class ExcalidrawAssetsBinding {
       ymap.unobserve(handler);
     });
 
-    api.addFiles([...ymap.keys()].map((key) => ymap.get(key) as BinaryFileData));
+    // set initial
+    api.addFiles(
+      [...ymap.keys()].map((key) => ymap.get(key) as BinaryFileData),
+    );
   }
   destroy() {
     for (const s of this.subscriptions) {
