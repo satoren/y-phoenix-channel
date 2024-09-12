@@ -42,7 +42,10 @@ export class ExcalidrawBinding {
         );
 
         const deleted = prevVersions
-          .filter((el) => elementMap[el.id] == null)
+          .filter((el) => {
+            const elem = elementMap[el.id];
+            return elem == null || elem.isDeleted;
+          })
           .map((el) => el.id);
         const added = elements
           .filter((el) => prevVersionsMap[el.id] == null)
@@ -69,18 +72,20 @@ export class ExcalidrawBinding {
         }
         const doc = ymap.doc;
         doc?.transact(() => {
-          deleted.forEach((id) => {
+          for (const id of deleted) {
             ymap.delete(id);
-          });
-          added.forEach((id) => {
+          }
+
+          for (const id of added) {
             const map = ymap.set(id, new Y.Map());
             const elem = elementMap[id];
 
             for (const [key, value] of Object.entries(elem)) {
               map.set(key, value);
             }
-          });
-          changed.forEach((id) => {
+          }
+
+          for (const id of changed) {
             const map = ymap.get(id) as Y.Map<unknown> | undefined;
             const elem = elementMap[id];
             if (map) {
@@ -103,7 +108,7 @@ export class ExcalidrawBinding {
                 map.set(key, value);
               }
             }
-          });
+          }
         }, this);
       }),
     );
@@ -114,7 +119,8 @@ export class ExcalidrawBinding {
       }
       const elements = [...api.getSceneElements()];
       let changed = false;
-      ymap.forEach((map) => {
+
+      for (const [key, map] of ymap) {
         if (map instanceof Y.Map) {
           const value = map.toJSON() as NonDeletedExcalidrawElement;
           const id = value.id;
@@ -130,7 +136,7 @@ export class ExcalidrawBinding {
             changed = true;
           }
         }
-      });
+      }
       if (changed) {
         api.updateScene({ elements });
       }
