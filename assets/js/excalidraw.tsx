@@ -49,7 +49,7 @@ export default function App() {
     if (!api) return;
 
     const binding = new ExcalidrawBinding(
-      ydoc.getMap("elementsMap"),
+      ydoc.getArray("elements"),
       api,
       provider.awareness,
     );

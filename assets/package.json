@@ -4,7 +4,7 @@
   "description": "",
   "main": "js/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "format": "npx @biomejs/biome format --write ./"
   },
   "author": "",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@types/phoenix": "1.6.5",
     "@types/react": "18.3.5",
-    "@types/react-dom": "18.3.0"
+    "@types/react-dom": "18.3.0",
+    "vitest": "^2.1.0"
   }
 }
