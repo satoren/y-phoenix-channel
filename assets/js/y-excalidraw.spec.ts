@@ -1,11 +1,68 @@
-import { describe, expect, test } from "vitest";
-import { syncElementsToYArray } from "./y-excalidraw";
+import { describe, expect, test, vi } from "vitest";
+import { ExcalidrawBinding } from "./y-excalidraw";
 import * as Y from "yjs";
+import type {
+  AppState,
+  BinaryFiles,
+  ExcalidrawImperativeAPI,
+} from "@excalidraw/excalidraw/types/types";
+import { ExcalidrawElement, NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
 
-describe("syncElementsToYArray", () => {
-  const ydoc = new Y.Doc();
-  test("adds 1 + 2 to equal 3", () => {
-    const array = ydoc.getArray<Y.Map<unknown>>("elements");
+const syncDocs = (doc1: Y.Doc, doc2: Y.Doc) => {
+  const sv1 = Y.encodeStateVector(doc1);
+  const update2 = Y.encodeStateAsUpdate(doc2, sv1);
+  Y.applyUpdate(doc1, update2);
+
+  const sv2 = Y.encodeStateVector(doc2);
+  const update1 = Y.encodeStateAsUpdate(doc1, sv2);
+  Y.applyUpdate(doc2, update1);
+}
+
+const createExcalidrawApiMock = () => {
+  let elements = []
+  type OnChangeCallback = (elements: readonly ExcalidrawElement[], appState: AppState, files: BinaryFiles) => void
+  const onChangeListeners:OnChangeCallback[] = []
+
+  return   vi.mocked<ExcalidrawImperativeAPI>(({
+    updateScene: vi.fn(({elements: updatedElements})=>{
+      elements = updatedElements
+      onChangeListeners.forEach(listener=>listener(updatedElements, {} as any, {}))
+    }),
+    updateLibrary: vi.fn(),
+    resetScene: undefined,
+    getSceneElementsIncludingDeleted: vi.fn(()=>elements),
+    history: {
+      clear: undefined
+    },
+    scrollToContent: vi.fn(),
+    getSceneElements: vi.fn(()=>elements),
+    getAppState: vi.fn(),
+    getFiles: vi.fn(),
+    refresh: vi.fn(),
+    setToast: vi.fn(),
+    addFiles: vi.fn(),
+    id: "",
+    setActiveTool: vi.fn(),
+    setCursor: vi.fn(),
+    resetCursor: vi.fn(),
+    toggleSidebar: vi.fn(),
+    updateFrameRendering: vi.fn(),
+    onChange: vi.fn((callback: OnChangeCallback)=>{
+      onChangeListeners.push(callback)
+      return ()=>{
+        const index = onChangeListeners.indexOf(callback)
+        if(index>-1){
+          onChangeListeners.splice(index, 1)
+        }
+      }
+    }),
+    onPointerDown: vi.fn(),
+    onPointerUp: vi.fn(),
+  }))
+}
+
+describe("ExcalidrawBinding", () => {
+  test("snapshot", () => {
     const e1 = [
       {
         id: "cIQh4r6HOcWQTbIKlVdc7",
@@ -303,11 +360,40 @@ describe("syncElementsToYArray", () => {
         lastCommittedPoint: [-104, 13.33331298828125],
       },
     ] as const;
-    syncElementsToYArray(e1, array);
-    syncElementsToYArray(e2, array);
-    syncElementsToYArray(e3, array);
-    syncElementsToYArray(e4, array);
+    
+  const ydoc = new Y.Doc();
+    const array = ydoc.getArray<Y.Map<unknown>>("elements");
+    const api1 = createExcalidrawApiMock()
+    const binding = new ExcalidrawBinding(array, api1);
+    
+    const ydoc2 = new Y.Doc();
+    const array2 = ydoc2.getArray<Y.Map<unknown>>("elements");
+    const api2= createExcalidrawApiMock()
+    const binding2 = new ExcalidrawBinding(array, api2);
 
-    expect(array.toJSON()).toMatchSnapshot();
+    api1.updateScene({ elements: e1 });
+    syncDocs(ydoc, ydoc2);
+    api1.updateScene({ elements: e2 });
+    syncDocs(ydoc, ydoc2);
+    api1.updateScene({ elements: e3 });
+    syncDocs(ydoc, ydoc2);
+    api1.updateScene({ elements: e4 });
+    syncDocs(ydoc, ydoc2);
+
+    api2.updateScene({ elements: [...e4].reverse() });
+    syncDocs(ydoc, ydoc2);
+    api2.updateScene({ elements: e4 });
+    syncDocs(ydoc, ydoc2);
+
+    expect(api1.getSceneElements()).toMatchSnapshot();
+    expect(api2.getSceneElements()).toMatchSnapshot();
+
+
+     expect(array2.toJSON()).toMatchSnapshot();
+     api2.updateScene({ elements: e4.map((e) => ({ ...e, isDeleted: true })) });
+     syncDocs(ydoc, ydoc2);
+
+     expect(api1.getSceneElements()).toEqual([]);
+     expect(api2.getSceneElements()).toEqual([]);
   });
 });
