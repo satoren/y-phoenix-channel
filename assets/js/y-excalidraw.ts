@@ -10,13 +10,12 @@ import type {
   ExcalidrawElement,
   NonDeletedExcalidrawElement,
 } from "@excalidraw/excalidraw/types/element/types";
-import { J } from "vitest/dist/chunks/reporters.WnPwkmgA.js";
 
 type ElementWithIndex = NonDeletedExcalidrawElement & {
   index: number;
 };
 
-export const syncElementsToYArray = (
+ const syncElementsToYArray = (
   elements: readonly ExcalidrawElement[],
   yarray: Y.Array<Y.Map<unknown>>,
 ) => {
@@ -84,8 +83,6 @@ export const syncElementsToYArray = (
   if (deleted.length === 0 && added.length === 0 && changed.length === 0) {
     return;
   }
-
-  console.log("syncElementsToYArray", { deleted, added, changed });
 
   // https://discuss.yjs.dev/t/moving-elements-in-lists/92/5
   const doc = yarray.doc;
@@ -173,7 +170,7 @@ export class ExcalidrawBinding {
       if (txn.origin === this) {
         return;
       }
-      const elements = [...api.getSceneElements()];
+      let elements = [...api.getSceneElements()];
       let changed = false;
 
       const positionMap = {};
@@ -199,9 +196,12 @@ export class ExcalidrawBinding {
           }
         }
       }
+      if (Object.keys(positionMap).length !== elements.length) {
+        changed = true;
+      }
       if (changed) {
-        elements.sort((a, b) => positionMap[a.id] - positionMap[b.id]);
-        api.updateScene({ elements });
+        const newElements = elements.filter((e) => (e.id in positionMap)).sort((a, b) => positionMap[a.id] - positionMap[b.id]);
+        api.updateScene({ elements: newElements });
       }
     });
 
