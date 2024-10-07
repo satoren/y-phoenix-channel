@@ -10,7 +10,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@blocknote/core": "^0.15.5",
+    "@blocknote/core": "^0.16.0",
     "@blocknote/mantine": "^0.15.5",
     "@blocknote/react": "^0.15.5",
     "@excalidraw/excalidraw": "^0.17.6",
