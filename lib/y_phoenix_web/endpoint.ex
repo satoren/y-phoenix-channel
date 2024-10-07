@@ -26,7 +26,7 @@ defmodule YPhoenixWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :y_phoenix,
-    gzip: false,
+    gzip: true,
     only: YPhoenixWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
