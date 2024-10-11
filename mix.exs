@@ -61,7 +61,7 @@ defmodule YPhoenix.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:rustler, ">= 0.34.0"},
-      {:y_ex, ">= 0.5.0"}
+      {:y_ex, "~> 0.6.3"}
     ]
   end
 
