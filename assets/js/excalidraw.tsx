@@ -10,12 +10,12 @@ import { IndexeddbPersistence } from "y-indexeddb";
 import { Socket } from "phoenix";
 import { generateUsername } from "friendly-username-generator";
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types/types";
-import { ExcalidrawBinding, ExcalidrawAssetsBinding } from "./y-excalidraw";
+import { ExcalidrawBinding } from "y-excalidraw"
 
 const socket = new Socket("/socket");
 socket.connect();
 const ydoc = new Y.Doc();
-const docname = `exalidraw:${new URLSearchParams(window.location.search).get("docname") ?? "exalidraw"}`;
+const docname = `excalidraw:${new URLSearchParams(window.location.search).get("docname") ?? "exalidraw"}`;
 
 const provider = new PhoenixChannelProvider(
   socket,
@@ -45,28 +45,31 @@ export default function App() {
   const [api, setApi] = React.useState<ExcalidrawImperativeAPI | null>(null);
   const [binding, setBindings] = React.useState<ExcalidrawBinding | null>(null);
 
+  const conrainerRef = React.useRef<HTMLDivElement>(null);
+
   React.useEffect(() => {
     if (!api) return;
 
+    const yElements = ydoc.getArray<Y.Map<unknown>>('elements');
+    const yAssets = ydoc.getMap('assets');
     const binding = new ExcalidrawBinding(
-      ydoc.getArray("elements"),
+      yElements,
+      yAssets,
       api,
       provider.awareness,
+      // excalidraw dom is needed to override the undo/redo buttons in the UI as there is no way to override it via props in excalidraw
+      // You might need to pass {trackedOrigins: new Set()} to undomanager depending on whether your provider sets an origin or not
+      conrainerRef.current ? { excalidrawDom: conrainerRef.current, undoManager: new Y.UndoManager(yElements) } : undefined,
     );
     setBindings(binding);
-    const assetBinding = new ExcalidrawAssetsBinding(
-      ydoc.getMap("assets"),
-      api,
-    );
     return () => {
       setBindings(null);
       binding.destroy();
-      assetBinding.destroy();
     };
   }, [api]);
 
   return (
-    <div style={{ height: "100vh" }}>
+    <div style={{ height: "100vh" }} ref={conrainerRef}>
       <Excalidraw
         excalidrawAPI={setApi}
         onPointerUpdate={binding?.onPointerUpdate}
