@@ -30,6 +30,6 @@
     "@types/phoenix": "1.6.5",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "vitest": "2.1.4"
+    "vitest": "2.1.5"
   }
 }
