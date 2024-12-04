@@ -14,8 +14,8 @@
     },
     {
       "groupName": "blocknote packages",
-      "matchPackageNames": [
-        "^@blocknote/"
+      "matchSourceUrls": [
+        "https://github.com/TypeCellOS/BlockNote"
       ]
     }
   ]
