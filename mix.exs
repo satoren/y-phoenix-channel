@@ -42,7 +42,7 @@ defmodule YPhoenix.MixProject do
       # TODO bump on release to {:phoenix_live_view, "~> 1.0.0"},
       {:phoenix_live_view, "== 1.0.0", override: true},
       {:floki, "== 0.36.2", only: :test},
-      {:phoenix_live_dashboard, "== 0.8.4"},
+      {:phoenix_live_dashboard, "== 0.8.5"},
       {:esbuild, "== 0.8.2", runtime: Mix.env() == :dev},
       {:tailwind, "== 0.2.3", runtime: Mix.env() == :dev},
       {:heroicons,
