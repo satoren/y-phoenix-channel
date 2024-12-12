@@ -33,7 +33,7 @@ defmodule YPhoenix.MixProject do
   defp deps do
     [
       {:phoenix, "== 1.7.18"},
-      {:phoenix_ecto, "== 4.6.2"},
+      {:phoenix_ecto, "== 4.6.3"},
       {:ecto_sql, "== 3.12.1"},
       {:postgrex, "== 0.19.1"},
       {:ecto_psql_extras, "== 0.8.3"},
