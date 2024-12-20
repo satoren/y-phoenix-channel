@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@types/phoenix": "1.6.6",
-    "@types/react": "18.3.17",
+    "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
     "vitest": "2.1.8"
   }
