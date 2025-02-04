@@ -40,7 +40,7 @@ defmodule YPhoenix.MixProject do
       {:phoenix_html, "== 4.1.1"},
       {:phoenix_live_reload, "== 1.5.3", only: :dev},
       # TODO bump on release to {:phoenix_live_view, "~> 1.0.0"},
-      {:phoenix_live_view, "== 1.0.3", override: true},
+      {:phoenix_live_view, "== 1.0.4", override: true},
       {:floki, "== 0.37.0", only: :test},
       {:phoenix_live_dashboard, "== 0.8.6"},
       {:esbuild, "== 0.8.2", runtime: Mix.env() == :dev},
