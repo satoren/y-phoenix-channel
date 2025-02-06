@@ -43,7 +43,6 @@ defmodule YPhoenix.MixProject do
       {:phoenix_live_view, "== 1.0.4", override: true},
       {:floki, "== 0.37.0", only: :test},
       {:phoenix_live_dashboard, "== 0.8.6"},
-      {:esbuild, "== 0.8.2", runtime: Mix.env() == :dev},
       {:tailwind, "== 0.2.4", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
@@ -79,13 +78,12 @@ defmodule YPhoenix.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": [
         "tailwind.install --if-missing",
-        "cmd --cd assets npm install",
-        "esbuild.install --if-missing"
+        "cmd --cd assets npm install"
       ],
-      "assets.build": ["tailwind y_phoenix", "esbuild y_phoenix"],
+      "assets.build": ["tailwind y_phoenix", "cmd --cd assets node build.js"],
       "assets.deploy": [
         "tailwind y_phoenix --minify",
-        "esbuild y_phoenix --minify",
+        "cmd --cd assets node build.js --deploy",
         "phx.digest"
       ]
     ]
