@@ -10,7 +10,7 @@ import { IndexeddbPersistence } from "y-indexeddb";
 import { Socket } from "phoenix";
 import { generateUsername } from "friendly-username-generator";
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types/types";
-import { ExcalidrawBinding } from "y-excalidraw"
+import { ExcalidrawBinding } from "y-excalidraw";
 
 const socket = new Socket("/socket");
 socket.connect();
@@ -50,8 +50,8 @@ export default function App() {
   React.useEffect(() => {
     if (!api) return;
 
-    const yElements = ydoc.getArray<Y.Map<unknown>>('elements');
-    const yAssets = ydoc.getMap('assets');
+    const yElements = ydoc.getArray<Y.Map<unknown>>("elements");
+    const yAssets = ydoc.getMap("assets");
     const binding = new ExcalidrawBinding(
       yElements,
       yAssets,
@@ -59,7 +59,12 @@ export default function App() {
       provider.awareness,
       // excalidraw dom is needed to override the undo/redo buttons in the UI as there is no way to override it via props in excalidraw
       // You might need to pass {trackedOrigins: new Set()} to undomanager depending on whether your provider sets an origin or not
-      conrainerRef.current ? { excalidrawDom: conrainerRef.current, undoManager: new Y.UndoManager(yElements) } : undefined,
+      conrainerRef.current
+        ? {
+            excalidrawDom: conrainerRef.current,
+            undoManager: new Y.UndoManager(yElements),
+          }
+        : undefined,
     );
     setBindings(binding);
     return () => {

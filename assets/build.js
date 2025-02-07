@@ -1,23 +1,26 @@
 import esbuild from "esbuild";
-import {sassPlugin} from 'esbuild-sass-plugin'
+import { sassPlugin } from "esbuild-sass-plugin";
 
 const args = process.argv.slice(2);
 const watch = args.includes("--watch");
 const deploy = args.includes("--deploy");
-
 
 const loader = {
   ".woff": "file",
   ".woff2": "file",
 };
 
-const plugins = [
-  sassPlugin()
-];
+const plugins = [sassPlugin()];
 
 // Define esbuild options
 let opts = {
-  entryPoints: ["js/app.js", "js/quill.ts", "js/blocknote.tsx", "js/excalidraw.tsx", "js/js-draw.tsx"],
+  entryPoints: [
+    "js/app.js",
+    "js/quill.ts",
+    "js/blocknote.tsx",
+    "js/excalidraw.tsx",
+    "js/js-draw.tsx",
+  ],
   bundle: true,
   logLevel: "info",
   target: "es2017",
