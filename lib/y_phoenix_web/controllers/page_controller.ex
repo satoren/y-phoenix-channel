@@ -16,4 +16,8 @@ defmodule YPhoenixWeb.PageController do
   def excalidraw(conn, _params) do
     render(conn, :excalidraw, layout: false)
   end
+
+  def jsdraw(conn, _params) do
+    render(conn, :jsdraw, layout: false)
+  end
 end
