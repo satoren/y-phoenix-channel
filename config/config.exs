@@ -31,16 +31,6 @@ config :y_phoenix, YPhoenixWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :y_phoenix, YPhoenix.Mailer, adapter: Swoosh.Adapters.Local
 
-# Configure esbuild (the version is required)
-config :esbuild,
-  version: "0.17.11",
-  y_phoenix: [
-    args:
-      ~w(js/app.js js/quill.ts js/blocknote.tsx js/excalidraw.tsx --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/* --loader:.woff=file --loader:.woff2=file),
-    cd: Path.expand("../assets", __DIR__),
-    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
-  ]
-
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "3.4.3",
