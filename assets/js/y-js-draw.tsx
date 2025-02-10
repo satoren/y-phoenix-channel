@@ -4,10 +4,13 @@ import {
   EditorEventType,
   Erase,
   uniteCommands,
+  Vec3,
 } from "js-draw";
+
 import equal from "fast-deep-equal";
 import type * as Y from "yjs";
 import type * as awarenessProtocol from "y-protocols/awareness";
+import { JsDrawCursor } from "./js-draw-cursor";
 
 type JsDrawSerializedElement = {
   data: string | number | unknown[] | Record<string, unknown>;
@@ -16,6 +19,7 @@ type JsDrawSerializedElement = {
   name: string;
   zIndex: number;
 };
+
 export class JsDrawBinding {
   yElements: Y.Map<JsDrawSerializedElement>;
   editor: Editor;
@@ -28,9 +32,14 @@ export class JsDrawBinding {
     ymap: Y.Map<JsDrawSerializedElement>,
     editor: Editor,
     awareness?: awarenessProtocol.Awareness,
+    cursorDrawer?: JsDrawCursor,
   ) {
     this.editor = editor;
     this.yElements = ymap;
+
+    if (awareness) {
+      this.setupAwareness(awareness, cursorDrawer);
+    }
 
     this.subscriptions.push(
       editor.notifier.on(EditorEventType.CommandDone, (e) => {
@@ -95,6 +104,61 @@ export class JsDrawBinding {
         .filter((command) => command != null);
       editor.dispatch(uniteCommands(commands));
     });
+  }
+
+  setupAwareness(
+    awareness: awarenessProtocol.Awareness,
+    cursorCanvas?: JsDrawCursor,
+  ) {
+    if (cursorCanvas) {
+      cursorCanvas.addCursorChange((pos) => {
+        awareness.setLocalStateField("cursor", pos);
+      });
+
+      awareness.on(
+        "change",
+        ({
+          added,
+          updated,
+          removed,
+        }: {
+          added: number[];
+          updated: number[];
+          removed: number[];
+        }) => {
+          for (const id of added) {
+            if (id === awareness.clientID) {
+              continue;
+            }
+            const cursor = awareness.getStates().get(id);
+            if (cursor) {
+              const { cursor: pos, user } = cursor;
+              if (pos) {
+                cursorCanvas.updateCursor(id, { ...pos, ...user });
+              }
+            }
+          }
+          for (const id of updated) {
+            if (id === awareness.clientID) {
+              continue;
+            }
+            const cursor = awareness.getStates().get(id);
+            if (cursor) {
+              const { cursor: pos, user } = cursor;
+              if (pos) {
+                cursorCanvas.updateCursor(id, { ...pos, ...user });
+              }
+            }
+          }
+          for (const id of removed) {
+            if (id === awareness.clientID) {
+              continue;
+            }
+            cursorCanvas.removeCursor(id);
+          }
+        },
+      );
+    }
   }
 
   syncToYjs() {
