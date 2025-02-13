@@ -12,6 +12,7 @@ import { IndexeddbPersistence } from "y-indexeddb";
 import { Socket } from "phoenix";
 import { JsDrawCursor } from "./js-draw-cursor";
 import { generateUsername } from "friendly-username-generator";
+import { BackgroundComponentBackgroundType, Color4 } from "js-draw";
 
 const socket = new Socket("/socket");
 socket.connect();
@@ -55,14 +56,14 @@ domNode.appendChild(editorRoot);
 
 const editor = new Editor(editorRoot);
 
-const overlay = document.createElement("div");
-overlay.style.width = "100%";
-overlay.style.height = "100%";
-overlay.style.position = "absolute";
-overlay.style.pointerEvents = "none";
-domNode.appendChild(overlay);
+editor.dispatch(
+  editor.setBackgroundStyle({
+    color: Color4.transparent,
+    type: BackgroundComponentBackgroundType.None,
+    autoresize: true,
+  }));
 
-const cursors = new JsDrawCursor(editor, overlay);
+const cursors = new JsDrawCursor(editor);
 const a = new JsDrawBinding(
   ydoc.getMap("elementMap"),
   editor,
