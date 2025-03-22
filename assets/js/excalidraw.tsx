@@ -1,17 +1,22 @@
 import * as React from "react";
 
-// can not use development version for excalidraw on esbuild
-import { Excalidraw } from "@excalidraw/excalidraw/dist/excalidraw.production.min";
+import { Excalidraw  } from "@excalidraw/excalidraw";
+import "@excalidraw/excalidraw/index.css";
 import * as Y from "yjs";
+
+
 
 import { createRoot } from "react-dom/client";
 import { PhoenixChannelProvider } from "./y-phoenix-channel";
 import { IndexeddbPersistence } from "y-indexeddb";
 import { Socket } from "phoenix";
 import { generateUsername } from "friendly-username-generator";
-import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types/types";
-import { ExcalidrawBinding } from "y-excalidraw";
+import { ExcalidrawBinding } from "./y-excalidraw";
 
+type ExcalidrawProps = Parameters<typeof Excalidraw>[0];
+type ExcalidrawImperativeAPI = Parameters<
+  NonNullable<ExcalidrawProps["excalidrawAPI"]>
+>[0];
 const socket = new Socket("/socket");
 socket.connect();
 const ydoc = new Y.Doc();
@@ -24,21 +29,9 @@ const provider = new PhoenixChannelProvider(
 );
 const persistence = new IndexeddbPersistence(docname, ydoc);
 
-const usercolors = [
-  "#30bced",
-  "#6eeb83",
-  "#ffbc42",
-  "#ecd444",
-  "#ee6352",
-  "#9ac2c9",
-  "#8acb88",
-  "#1be7ff",
-];
 
-const myColor = usercolors[Math.floor(Math.random() * usercolors.length)];
 provider.awareness.setLocalStateField("user", {
   name: generateUsername(),
-  color: myColor,
 });
 
 export default function App() {
@@ -50,21 +43,14 @@ export default function App() {
   React.useEffect(() => {
     if (!api) return;
 
-    const yElements = ydoc.getArray<Y.Map<unknown>>("elements");
-    const yAssets = ydoc.getMap("assets");
     const binding = new ExcalidrawBinding(
-      yElements,
-      yAssets,
+      ydoc.getArray("elements"),
+      ydoc.getArray("assets"),
       api,
       provider.awareness,
-      // excalidraw dom is needed to override the undo/redo buttons in the UI as there is no way to override it via props in excalidraw
-      // You might need to pass {trackedOrigins: new Set()} to undomanager depending on whether your provider sets an origin or not
-      conrainerRef.current
-        ? {
-            excalidrawDom: conrainerRef.current,
-            undoManager: new Y.UndoManager(yElements),
-          }
-        : undefined,
+      {
+        cursorDisplayTimeout: 5000,
+      }
     );
     setBindings(binding);
     return () => {

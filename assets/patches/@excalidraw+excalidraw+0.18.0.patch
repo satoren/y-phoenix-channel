@@ -1,0 +1,16 @@
+diff --git a/node_modules/@excalidraw/excalidraw/package.json b/node_modules/@excalidraw/excalidraw/package.json
+index a545ed7..5c72d4c 100644
+--- a/node_modules/@excalidraw/excalidraw/package.json
++++ b/node_modules/@excalidraw/excalidraw/package.json
+@@ -9,10 +9,7 @@
+     "./*": {
+       "types": "./dist/types/excalidraw/*.d.ts"
+     },
+-    "./index.css": {
+-      "development": "./dist/dev/index.css",
+-      "production": "./dist/prod/index.css"
+-    },
++    "./index.css": "./dist/prod/index.css",
+     ".": {
+       "types": "./dist/types/excalidraw/index.d.ts",
+       "development": "./dist/dev/index.js",
