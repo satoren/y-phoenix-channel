@@ -43,7 +43,7 @@ defmodule YPhoenix.MixProject do
       {:phoenix_live_view, "== 1.0.9", override: true},
       {:floki, "== 0.37.1", only: :test},
       {:phoenix_live_dashboard, "== 0.8.6"},
-      {:tailwind, "== 0.2.4", runtime: Mix.env() == :dev},
+      {:tailwind, "== 0.3.1", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
        tag: "v2.1.1",
