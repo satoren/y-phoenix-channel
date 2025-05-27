@@ -20,6 +20,7 @@ let opts = {
     "js/blocknote.tsx",
     "js/excalidraw.tsx",
     "js/js-draw.tsx",
+    "js/lexical.tsx",
   ],
   bundle: true,
   logLevel: "info",

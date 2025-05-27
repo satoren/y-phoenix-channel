@@ -20,4 +20,9 @@ defmodule YPhoenixWeb.PageController do
   def jsdraw(conn, _params) do
     render(conn, :jsdraw, layout: false)
   end
+
+  def lexical(conn, _params) do
+    render(conn, :lexical, layout: false)
+  end
+
 end
