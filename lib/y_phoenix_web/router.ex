@@ -22,6 +22,7 @@ defmodule YPhoenixWeb.Router do
     get "/blocknote", PageController, :blocknote
     get "/excalidraw", PageController, :excalidraw
     get "/js-draw", PageController, :jsdraw
+    get "/lexical", PageController, :lexical
   end
 
   # Other scopes may use custom stacks.
