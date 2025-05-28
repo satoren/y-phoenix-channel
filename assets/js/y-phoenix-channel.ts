@@ -480,6 +480,7 @@ export class PhoenixChannelProvider extends Observable {
     if (this.channel != null) {
       this.channel?.leave();
     }
+    this.channel = undefined;
   }
 
   connect() {
