@@ -13,9 +13,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@blocknote/core": "0.31.2",
-    "@blocknote/mantine": "0.31.2",
-    "@blocknote/react": "0.31.2",
+    "@blocknote/core": "0.31.3",
+    "@blocknote/mantine": "0.31.3",
+    "@blocknote/react": "0.31.3",
     "@excalidraw/excalidraw": "0.18.0",
     "@lexical/react": "0.32.1",
     "@lexical/yjs": "0.32.1",
