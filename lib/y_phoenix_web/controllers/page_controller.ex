@@ -25,4 +25,7 @@ defmodule YPhoenixWeb.PageController do
     render(conn, :lexical, layout: false)
   end
 
+  def tiptap(conn, _params) do
+    render(conn, :tiptap, layout: false)
+  end
 end

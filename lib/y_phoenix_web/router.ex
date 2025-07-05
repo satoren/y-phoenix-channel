@@ -23,6 +23,7 @@ defmodule YPhoenixWeb.Router do
     get "/excalidraw", PageController, :excalidraw
     get "/js-draw", PageController, :jsdraw
     get "/lexical", PageController, :lexical
+    get "/tiptap", PageController, :tiptap
   end
 
   # Other scopes may use custom stacks.

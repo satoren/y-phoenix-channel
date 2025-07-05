@@ -7,3 +7,4 @@ Collaborative editing demo app using [y_ex](https://github.com/satoren/y_ex) and
 * [quill](https://y-phoenix.gigalixirapp.com/quill)
 * [blocknote](https://y-phoenix.gigalixirapp.com/blocknote)
 * [lexical](https://y-phoenix.gigalixirapp.com/lexical)
+* [tiptap](https://y-phoenix.gigalixirapp.com/tiptap)
