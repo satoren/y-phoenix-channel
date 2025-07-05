@@ -21,6 +21,7 @@ let opts = {
     "js/excalidraw.tsx",
     "js/js-draw.tsx",
     "js/lexical.tsx",
+    "js/tiptap.tsx",
   ],
   bundle: true,
   logLevel: "info",
