@@ -1,0 +1,32 @@
+# Build outputs
+dist/
+build/
+lib/
+*.tsbuildinfo
+
+# Dependency packages
+node_modules/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test coverage
+coverage/
+
+# Environment variables and settings
+.env
+.env.*
+
+# OS and editor specific
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+*.log
+
+# Others
+*.tgz
