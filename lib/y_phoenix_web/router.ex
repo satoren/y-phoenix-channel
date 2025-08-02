@@ -24,6 +24,7 @@ defmodule YPhoenixWeb.Router do
     get "/js-draw", PageController, :jsdraw
     get "/lexical", PageController, :lexical
     get "/tiptap", PageController, :tiptap
+    get "/prosemirror", PageController, :prosemirror
   end
 
   # Other scopes may use custom stacks.
