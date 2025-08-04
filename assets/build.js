@@ -22,6 +22,7 @@ let opts = {
     "js/js-draw.tsx",
     "js/lexical.tsx",
     "js/tiptap.tsx",
+    "js/prosemirror.tsx",
   ],
   bundle: true,
   logLevel: "info",
