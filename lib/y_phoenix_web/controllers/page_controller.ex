@@ -28,4 +28,7 @@ defmodule YPhoenixWeb.PageController do
   def tiptap(conn, _params) do
     render(conn, :tiptap, layout: false)
   end
+  def prosemirror(conn, _params) do
+    render(conn, :prosemirror, layout: false)
+  end
 end
