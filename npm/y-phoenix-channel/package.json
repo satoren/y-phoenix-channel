@@ -35,18 +35,18 @@
     }
   },
   "dependencies": {
-    "@y/protocols": "^1.0.6-1",
-    "lib0": "^0.2.102"
+    "@y/protocols": "1.0.6-1",
+    "lib0": "0.2.109"
   },
   "peerDependencies": {
     "phoenix": "^1",
     "yjs": "^13"
   },
   "devDependencies": {
-    "@types/node": "^24.0.10",
-    "@types/phoenix": "^1.6.6",
-    "tsup": "^8.5.0",
-    "typescript": "^5.0.0",
-    "yjs": "^14.0.0-6"
+    "@types/node": "24.0.10",
+    "@types/phoenix": "1.6.6",
+    "tsup": "8.5.0",
+    "typescript": "5.8.3",
+    "yjs": "14.0.0-8"
   }
 }
