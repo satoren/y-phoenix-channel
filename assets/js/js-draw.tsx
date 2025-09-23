@@ -15,7 +15,7 @@ import { generateUsername } from "friendly-username-generator";
 
 const socket = new Socket("/socket");
 socket.connect();
-const ydoc = new Y.Doc();
+const ydoc = new Y.Doc({ gc: true });
 const docname = `js-draw:${new URLSearchParams(window.location.search).get("docname") ?? "js-draw"}`;
 
 const provider = new PhoenixChannelProvider(

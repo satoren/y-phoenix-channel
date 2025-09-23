@@ -13,7 +13,7 @@ Quill.register("modules/cursors", QuillCursors);
 const socket = new Socket("/socket");
 socket.connect();
 
-const ydoc = new Y.Doc();
+const ydoc = new Y.Doc({ gc: true });
 
 const docname = `quill:${new URLSearchParams(window.location.search).get("docname") ?? "quill"}`;
 

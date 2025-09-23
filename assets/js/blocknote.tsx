@@ -13,7 +13,7 @@ import { generateUsername } from "friendly-username-generator";
 
 const socket = new Socket("/socket");
 socket.connect();
-const ydoc = new Y.Doc();
+const ydoc = new Y.Doc({ gc: true });
 const docname = `blocknote:${new URLSearchParams(window.location.search).get("docname") ?? "blocknote"}`;
 
 const provider = new PhoenixChannelProvider(
