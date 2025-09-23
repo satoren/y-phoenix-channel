@@ -8,6 +8,7 @@ import {
   reconcileElements,
   type Excalidraw,
 } from "@excalidraw/excalidraw";
+import { FileId } from "@excalidraw/excalidraw/element/types";
 
 type ExcalidrawProps = Parameters<typeof Excalidraw>[0];
 type ExcalidrawImperativeAPI = Parameters<
@@ -54,7 +55,6 @@ export class ExcalidrawBinding {
   subscriptions: (() => void)[] = [];
   collaborators: Collaborators = new Map();
   lastVersion = 0;
-  addedFileIds: Set<string> = new Set();
 
   /**
    * Initializes the binding between Excalidraw and Y.js
@@ -103,6 +103,19 @@ export class ExcalidrawBinding {
 
           const version = hashElementsVersion(elements);
           if (version !== this.lastVersion) {
+
+            const gcAssetFiles = ()=>{
+            const usedFileIds = new Set([
+              ...elements.map(e => e.type === "image" ? e.fileId : null).filter((f): f is FileId => f !== null),
+            ]);
+
+
+            const deletedFileIds = this.#yAssets.yarray.map(d => d.key).filter(id => !usedFileIds.has(id as FileId));
+              for (const id of deletedFileIds) {
+                this.#yAssets.delete(id);
+              }
+            }
+
             this.#yElements.doc?.transact(() => {
               // check deletion
               for (const yElem of this.#yElements.yarray) {
@@ -124,10 +137,13 @@ export class ExcalidrawBinding {
               }
             }, this);
             this.lastVersion = version;
+
+            gcAssetFiles();
+
           }
           if (files) {
             const newFiles = Object.entries(files).filter(([id, file]) => {
-              return this.#yAssets.get(id) == null;
+              return this.#yAssets.get(id) == null
             });
 
             this.#yAssets.doc?.transact(() => {
@@ -192,9 +208,6 @@ export class ExcalidrawBinding {
         }
         return [];
       });
-      for (const assets of addedFiles) {
-        this.addedFileIds.add(assets.id);
-      }
       this.#api.addFiles(addedFiles);
     };
     this.#yAssets.on("change", _remoteFilesChangeHandler); // only observe and not observe deep as assets are only added/deleted not updated
@@ -294,9 +307,6 @@ export class ExcalidrawBinding {
     // init assets
     const initialAssets = this.#yAssets.yarray.map(({ val }) => val);
 
-    for (const assets of initialAssets) {
-      this.addedFileIds.add(assets.id);
-    }
     this.#api.addFiles(initialAssets);
   }
 
