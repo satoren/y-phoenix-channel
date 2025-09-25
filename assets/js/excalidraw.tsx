@@ -20,7 +20,7 @@ type ExcalidrawImperativeAPI = Parameters<
 const socket = new Socket("/socket");
 socket.connect();
 const ydoc = new Y.Doc();
-const docname = `excalidraw:${new URLSearchParams(window.location.search).get("docname") ?? "exalidraw"}`;
+const docname = `excalidraw:${new URLSearchParams(window.location.search).get("docname") ?? "excalidraw"}`;
 
 const provider = new PhoenixChannelProvider(
   socket,
