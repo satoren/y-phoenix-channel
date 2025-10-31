@@ -34,7 +34,7 @@
     "prosemirror-example-setup": "1.2.3",
     "prosemirror-model": "1.25.4",
     "prosemirror-schema-basic": "1.2.4",
-    "prosemirror-state": "1.4.3",
+    "prosemirror-state": "1.4.4",
     "prosemirror-transform": "1.10.4",
     "prosemirror-view": "1.40.1",
     "quill": "2.0.3",
