@@ -12,6 +12,7 @@ defmodule YPhoenix.Application do
       YPhoenix.Repo,
       {DNSCluster, query: Application.get_env(:y_phoenix, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: YPhoenix.PubSub},
+      YPhoenixWeb.Presence,
       # Start the Finch HTTP client for sending emails
       {Finch, name: YPhoenix.Finch},
       # Start a worker by calling: YPhoenix.Worker.start_link(arg)
