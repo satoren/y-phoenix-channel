@@ -45,7 +45,7 @@
   "devDependencies": {
     "@types/node": "24.9.2",
     "@types/phoenix": "1.6.6",
-    "tsup": "8.5.0",
+    "tsup": "8.5.1",
     "typescript": "5.9.3",
     "yjs": "14.0.0-10"
   }
