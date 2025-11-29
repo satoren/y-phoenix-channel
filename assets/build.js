@@ -33,6 +33,7 @@ let opts = {
   nodePaths: ["../deps"],
   loader: loader,
   plugins: plugins,
+  format: "esm",
 };
 
 if (deploy) {
