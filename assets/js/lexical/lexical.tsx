@@ -1,5 +1,4 @@
-import * as React from "react";
-import { $getRoot, $createParagraphNode, $createTextNode } from "lexical";
+import React from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";

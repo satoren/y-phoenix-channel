@@ -14,16 +14,16 @@ const plugins = [sassPlugin()];
 
 // Define esbuild options
 let opts = {
-  entryPoints: [
-     "js/app.js",
-     "js/quill/quill.ts",
-     "js/blocknote/blocknote.tsx",
-     "js/excalidraw/excalidraw.tsx",
-     "js/js-draw/js-draw.tsx",
-     "js/lexical/lexical.tsx",
-     "js/tiptap/tiptap.tsx",
-     "js/prosemirror/prosemirror.tsx",
-  ],
+    entryPoints: [
+      { in: "js/app.js", out: "app.js" },
+      { in: "js/quill/quill.ts", out: "quill" },
+      { in: "js/blocknote/blocknote.tsx", out: "blocknote" },
+      { in: "js/excalidraw/excalidraw.tsx", out: "excalidraw" },
+      { in: "js/js-draw/js-draw.tsx", out: "js-draw" },
+      { in: "js/lexical/lexical.tsx", out: "lexical" },
+      { in: "js/tiptap/tiptap.tsx", out: "tiptap" },
+      { in: "js/prosemirror/prosemirror.tsx", out: "prosemirror" },
+    ],
   bundle: true,
   logLevel: "info",
   target: "es2017",
@@ -34,6 +34,7 @@ let opts = {
   loader: loader,
   plugins: plugins,
   format: "esm",
+  entryNames: "[name]",
 };
 
 if (deploy) {
@@ -57,5 +58,5 @@ if (watch) {
       process.exit(1);
     });
 } else {
-  esbuild.build(opts);
+    esbuild.build(opts);
 }

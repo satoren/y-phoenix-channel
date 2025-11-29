@@ -16,7 +16,6 @@
     "quill": "2.0.3",
     "quill-cursors": "4.0.4",
     "y-indexeddb": "9.0.12",
-    "y-quill": "1.0.0",
-    "yjs": "13.6.27"
+    "y-quill": "1.0.0"
   }
 }

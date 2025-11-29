@@ -11,13 +11,12 @@
   "author": "",
   "type": "commonjs",
   "dependencies": {
-    "@lexical/react": "0.31.2",
-    "@lexical/yjs": "0.31.2",
+    "@lexical/react": "0.38.2",
+    "@lexical/yjs": "0.38.2",
     "friendly-username-generator": "2.0.4",
-    "lexical": "0.32.1",
+    "lexical": "0.38.2",
     "phoenix": "1.8.2",
     "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "yjs": "13.6.27"
+    "react-dom": "19.2.0"
   }
 }
