@@ -6,8 +6,7 @@
   "scripts": {
     "build": "node build.js --deploy",
     "test": "vitest",
-    "format": "npx @biomejs/biome format --write ./",
-    "postinstall": "patch-package"
+    "format": "npx @biomejs/biome format --write ./"
   },
   "type": "module",
   "author": "",
@@ -53,7 +52,6 @@
     "@types/react-dom": "19.1.9",
     "esbuild": "0.25.12",
     "esbuild-sass-plugin": "3.3.1",
-    "patch-package": "8.0.1",
     "vitest": "4.0.7"
   }
 }
