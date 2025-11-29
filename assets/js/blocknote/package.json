@@ -19,6 +19,7 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "y-indexeddb": "9.0.12",
+    "yjs": "13.6.27",
     "y-phoenix-channel": "0.1.1"
   }
 }
