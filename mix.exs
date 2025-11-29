@@ -35,7 +35,7 @@ defmodule YPhoenix.MixProject do
       {:phoenix, "1.7.21"},
       {:phoenix_ecto, "4.6.5"},
       {:ecto_sql, "3.12.1"},
-      {:postgrex, "== 0.21.1"},
+      {:postgrex, "0.21.1"},
       {:ecto_psql_extras, "0.8.8"},
       {:phoenix_html, "4.2.1"},
       {:phoenix_live_reload, "1.6.1", only: :dev},
