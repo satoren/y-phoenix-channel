@@ -6,7 +6,7 @@ import { QuillBinding } from "y-quill";
 import { IndexeddbPersistence } from "y-indexeddb";
 
 import { Socket } from "phoenix";
-import { PhoenixChannelProvider } from "../y-phoenix-channel";
+import { PhoenixChannelProvider } from "y-phoenix-channel";
 import { generateUsername } from "friendly-username-generator";
 
 Quill.register("modules/cursors", QuillCursors);

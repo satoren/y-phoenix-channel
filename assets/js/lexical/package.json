@@ -9,7 +9,7 @@
   },
   "keywords": [],
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@lexical/react": "0.38.2",
     "@lexical/yjs": "0.38.2",
@@ -17,6 +17,7 @@
     "lexical": "0.38.2",
     "phoenix": "1.8.2",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "y-phoenix-channel": "0.1.1"
   }
 }

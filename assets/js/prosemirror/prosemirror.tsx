@@ -7,7 +7,7 @@ import {
   redo,
 } from "y-prosemirror";
 import { exampleSetup } from "prosemirror-example-setup";
-import { PhoenixChannelProvider } from "../y-phoenix-channel";
+import { PhoenixChannelProvider } from "y-phoenix-channel";
 import { Socket } from "phoenix";
 import * as Y from "yjs";
 import { EditorState } from "prosemirror-state";

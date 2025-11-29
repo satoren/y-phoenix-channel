@@ -9,11 +9,12 @@
   },
   "keywords": [],
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@excalidraw/excalidraw": "0.18.0",
     "friendly-username-generator": "2.0.4",
     "phoenix": "1.8.2",
-    "y-indexeddb": "9.0.12"
+    "y-indexeddb": "9.0.12",
+    "y-phoenix-channel": "0.1.1"
   }
 }

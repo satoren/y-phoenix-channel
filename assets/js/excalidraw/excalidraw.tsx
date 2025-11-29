@@ -4,7 +4,7 @@ import { Excalidraw  } from "@excalidraw/excalidraw";
 import "@excalidraw/excalidraw/index.css";
 import * as Y from "yjs";
 import { createRoot } from "react-dom/client";
-import { PhoenixChannelProvider } from "../y-phoenix-channel";
+import { PhoenixChannelProvider } from "y-phoenix-channel";
 import { IndexeddbPersistence } from "y-indexeddb";
 import { Socket } from "phoenix";
 import { generateUsername } from "friendly-username-generator";
