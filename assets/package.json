@@ -7,7 +7,7 @@
     "build": "node build.js --deploy",
     "test": "vitest",
     "format": "npx @biomejs/biome format --write ./",
-    "install:all": "npm install && cd js/quill && npm install && cd ../excalidraw && npm install && cd ../js-draw && npm install && cd ../lexical && npm install && cd ../prosemirror && npm install && cd ../tiptap && npm install"
+    "install:all": "npm install && cd js/quill && npm install && cd ../blocknote && npm install && cd ../excalidraw && npm install && cd ../js-draw && npm install && cd ../lexical && npm install && cd ../prosemirror && npm install && cd ../tiptap && npm install"
   },
   "type": "module",
   "author": "",
