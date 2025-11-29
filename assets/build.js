@@ -15,7 +15,7 @@ const plugins = [sassPlugin()];
 // Define esbuild options
 let opts = {
     entryPoints: [
-      { in: "js/app.js", out: "app.js" },
+      { in: "js/app.js", out: "app" },
       { in: "js/quill/quill.ts", out: "quill" },
       { in: "js/blocknote/blocknote.tsx", out: "blocknote" },
       { in: "js/excalidraw/excalidraw.tsx", out: "excalidraw" },
@@ -58,5 +58,7 @@ if (watch) {
       process.exit(1);
     });
 } else {
-    esbuild.build(opts);
+  esbuild.build(opts).catch((_error) => {
+    process.exit(1);
+  });
 }
