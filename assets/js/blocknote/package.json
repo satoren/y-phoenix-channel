@@ -11,9 +11,9 @@
   "author": "",
   "type": "commonjs",
   "dependencies": {
-    "@blocknote/core": "0.35.0",
-    "@blocknote/mantine": "0.35.0",
-    "@blocknote/react": "0.35.0",
+    "@blocknote/core": "0.42.3",
+    "@blocknote/mantine": "0.42.3",
+    "@blocknote/react": "0.42.3",
     "friendly-username-generator": "2.0.4",
     "phoenix": "1.8.2",
     "react": "19.2.0",
