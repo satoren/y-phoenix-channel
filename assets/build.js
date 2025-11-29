@@ -29,9 +29,11 @@ let opts = {
   target: "es2017",
   outdir: "../priv/static/assets",
   external: ["fonts/*", "images/*"],
+  conditions: ["production", "style"],
   nodePaths: ["../deps"],
   loader: loader,
   plugins: plugins,
+  format: "esm",
 };
 
 if (deploy) {
