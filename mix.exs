@@ -32,12 +32,12 @@ defmodule YPhoenix.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "== 1.8.2"},
+      {:phoenix, "1.8.2"},
       {:phoenix_ecto, "4.6.5"},
-      {:ecto_sql, "== 3.13.2"},
+      {:ecto_sql, "3.13.2"},
       {:postgrex, "0.21.1"},
       {:ecto_psql_extras, "0.8.8"},
-      {:phoenix_html, "== 4.3.0"},
+      {:phoenix_html, "4.3.0"},
       {:phoenix_live_reload, "1.6.1", only: :dev},
       # TODO bump on release to {:phoenix_live_view, "~> 1.0.0"},
       {:phoenix_live_view, "1.1.18", override: true},
