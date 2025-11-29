@@ -11,7 +11,7 @@ import * as Y from "yjs";
 import "./tiptap.scss";
 import { createRoot } from "react-dom/client";
 
-import { PhoenixChannelProvider } from "../y-phoenix-channel";
+import { PhoenixChannelProvider } from "y-phoenix-channel";
 import { Socket } from "phoenix";
 
 const colors = [

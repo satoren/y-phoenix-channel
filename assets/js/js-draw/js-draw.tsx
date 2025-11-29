@@ -3,7 +3,7 @@ import "js-draw/Editor.css";
 import "@melloware/coloris/dist/coloris.css";
 import * as Y from "yjs";
 import { JsDrawBinding } from "./y-js-draw";
-import { PhoenixChannelProvider } from "../y-phoenix-channel";
+import { PhoenixChannelProvider } from "y-phoenix-channel";
 import { IndexeddbPersistence } from "y-indexeddb";
 import { Socket } from "phoenix";
 import { JsDrawCursor } from "./js-draw-cursor";

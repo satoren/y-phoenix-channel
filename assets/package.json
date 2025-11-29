@@ -13,12 +13,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "lib0": "0.2.114",
-    "topbar": "3.0.0",
-    "y-indexeddb": "9.0.12",
-    "y-protocols": "1.0.6",
-    "y-utility": "0.1.4",
-    "yjs": "13.6.27"
+    "topbar": "3.0.0"
   },
   "devDependencies": {
     "@types/phoenix": "1.6.6",

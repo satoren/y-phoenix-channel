@@ -9,7 +9,7 @@
   },
   "keywords": [],
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "friendly-username-generator": "2.0.4",
     "phoenix": "1.8.2",
@@ -17,6 +17,8 @@
     "quill-cursors": "4.0.4",
     "y-indexeddb": "9.0.12",
     "y-quill": "1.0.0",
-    "yjs": "13.6.27"
+    "yjs": "13.6.27",
+    "y-phoenix-channel": "0.1.1"
+
   }
 }

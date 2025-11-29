@@ -1,5 +1,4 @@
-import * as React from "react";
-import { $getRoot, $createParagraphNode, $createTextNode } from "lexical";
+import React from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
@@ -9,7 +8,7 @@ import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import * as Y from "yjs";
 import { Socket } from "phoenix";
 import { useCallback } from "react";
-import { PhoenixChannelProvider } from "../y-phoenix-channel";
+import { PhoenixChannelProvider } from "y-phoenix-channel";
 import { createRoot } from "react-dom/client";
 import type { Provider } from "@lexical/yjs";
 

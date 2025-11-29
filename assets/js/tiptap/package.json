@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "tiptap.tsx",
   "license": "MIT",
+  "type": "module",
   "dependencies": {
     "@tiptap/extension-character-count": "2.27.1",
     "@tiptap/extension-collaboration": "2.27.1",
@@ -16,6 +17,7 @@
     "phoenix": "1.8.2",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "yjs": "13.6.27"
+    "yjs": "13.6.27",
+    "y-phoenix-channel": "0.1.1"
   }
 }
