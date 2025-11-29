@@ -1,0 +1,20 @@
+{
+  "name": "excalidraw-app",
+  "version": "1.0.0",
+  "main": "excalidraw.tsx",
+  "license": "MIT",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "commonjs",
+  "dependencies": {
+    "@excalidraw/excalidraw": "0.18.0",
+    "friendly-username-generator": "2.0.4",
+    "phoenix": "1.8.2",
+    "y-indexeddb": "9.0.12",
+    "yjs": "13.6.27"
+  }
+}

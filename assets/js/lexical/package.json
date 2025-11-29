@@ -1,0 +1,23 @@
+{
+  "name": "lexical-app",
+  "version": "1.0.0",
+  "main": "lexical.tsx",
+  "license": "MIT",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "commonjs",
+  "dependencies": {
+    "@lexical/react": "0.31.2",
+    "@lexical/yjs": "0.31.2",
+    "friendly-username-generator": "2.0.4",
+    "lexical": "0.32.1",
+    "phoenix": "1.8.2",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "yjs": "13.6.27"
+  }
+}

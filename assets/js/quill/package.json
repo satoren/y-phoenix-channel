@@ -1,0 +1,22 @@
+{
+  "name": "quill-app",
+  "version": "1.0.0",
+  "main": "quill.ts",
+  "license": "MIT",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "commonjs",
+  "dependencies": {
+    "friendly-username-generator": "2.0.4",
+    "phoenix": "1.8.2",
+    "quill": "2.0.3",
+    "quill-cursors": "4.0.4",
+    "y-indexeddb": "9.0.12",
+    "y-quill": "1.0.0",
+    "yjs": "13.6.27"
+  }
+}

@@ -78,7 +78,8 @@ defmodule YPhoenix.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": [
         "tailwind.install --if-missing",
-        "cmd --cd assets npm install"
+        "cmd --cd assets npm install",
+        "cmd --cd assets npm run install:all"
       ],
       "assets.build": ["tailwind y_phoenix", "cmd --cd assets node build.js"],
       "assets.deploy": [

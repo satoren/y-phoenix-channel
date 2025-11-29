@@ -7,7 +7,7 @@ import {
   redo,
 } from "y-prosemirror";
 import { exampleSetup } from "prosemirror-example-setup";
-import { PhoenixChannelProvider } from "./y-phoenix-channel";
+import { PhoenixChannelProvider } from "../y-phoenix-channel";
 import { Socket } from "phoenix";
 import * as Y from "yjs";
 import { EditorState } from "prosemirror-state";
@@ -43,7 +43,6 @@ const Editor = ({ ydoc, room }) => {
         ydoc
       );
       if (!provider.synced) {
-        // Wait for the provider to sync before initializing the editor
         await new Promise((resolve) => {
           provider.once("synced", resolve);
         });
@@ -64,7 +63,6 @@ const Editor = ({ ydoc, room }) => {
               "Mod-y": redo,
               "Mod-Shift-z": redo,
             }),
-
             ...exampleSetup({ schema, history: false }),
           ],
         }),

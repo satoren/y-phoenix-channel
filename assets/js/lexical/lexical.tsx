@@ -9,13 +9,13 @@ import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import * as Y from "yjs";
 import { Socket } from "phoenix";
 import { useCallback } from "react";
-import { PhoenixChannelProvider } from "./y-phoenix-channel";
+import { PhoenixChannelProvider } from "../y-phoenix-channel";
 import { createRoot } from "react-dom/client";
 import type { Provider } from "@lexical/yjs";
 
 const socket = new Socket("/socket");
 socket.connect();
-const docname = `lexical:${new URLSearchParams(window.location.search).get("docname") ?? "blocknote"}`;
+const docname = `lexical:${new URLSearchParams(window.location.search).get("docname") ?? "lexical"}`;
 
 function getDocFromMap(id: string, yjsDocMap: Map<string, Y.Doc>): Y.Doc {
 	let doc = yjsDocMap.get(id);
@@ -32,9 +32,6 @@ function getDocFromMap(id: string, yjsDocMap: Map<string, Y.Doc>): Y.Doc {
 
 function Editor() {
 	const initialConfig = {
-		// NOTE: This is critical for collaboration plugin to set editor state to null. It
-		// would indicate that the editor should not try to set any default state
-		// (not even empty one), and let collaboration plugin do it instead
 		editorState: null,
 		namespace: "Demo",
 		nodes: [],
@@ -47,13 +44,11 @@ function Editor() {
 	const providerFactory = useCallback(
 		(id: string, yjsDocMap: Map<string, Y.Doc>): Provider => {
 			const doc = getDocFromMap(id, yjsDocMap);
-
-			// @ts-expect-error TODO: FIXME https://github.com/facebook/lexical/blob/937c42473e782e6e9e3a879c3c27cb8ae43db004/examples/react-rich-collab/src/providers.ts#L45C1-L45C34
 			return new PhoenixChannelProvider(socket, `y_doc_room:${docname}`, doc, {
 				connect: false,
 			});
 		},
-		[],
+		[docname],
 	);
 
 	return (

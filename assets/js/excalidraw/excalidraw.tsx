@@ -3,11 +3,8 @@ import * as React from "react";
 import { Excalidraw  } from "@excalidraw/excalidraw";
 import "@excalidraw/excalidraw/index.css";
 import * as Y from "yjs";
-
-
-
 import { createRoot } from "react-dom/client";
-import { PhoenixChannelProvider } from "./y-phoenix-channel";
+import { PhoenixChannelProvider } from "../y-phoenix-channel";
 import { IndexeddbPersistence } from "y-indexeddb";
 import { Socket } from "phoenix";
 import { generateUsername } from "friendly-username-generator";
@@ -29,7 +26,6 @@ const provider = new PhoenixChannelProvider(
 );
 const persistence = new IndexeddbPersistence(docname, ydoc);
 
-
 provider.awareness.setLocalStateField("user", {
   name: generateUsername(),
 });
@@ -38,7 +34,7 @@ export default function App() {
   const [api, setApi] = React.useState<ExcalidrawImperativeAPI | null>(null);
   const [binding, setBindings] = React.useState<ExcalidrawBinding | null>(null);
 
-  const conrainerRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     if (!api) return;
@@ -60,7 +56,7 @@ export default function App() {
   }, [api]);
 
   return (
-    <div style={{ height: "100vh" }} ref={conrainerRef}>
+    <div style={{ height: "100vh" }} ref={containerRef}>
       <Excalidraw
         excalidrawAPI={setApi}
         onPointerUpdate={binding?.onPointerUpdate}
