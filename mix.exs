@@ -84,6 +84,8 @@ defmodule YPhoenix.MixProject do
       "assets.build": ["tailwind y_phoenix", "cmd --cd assets node build.js"],
       "assets.deploy": [
         "tailwind y_phoenix --minify",
+        "cmd --cd assets npm install",
+        "cmd --cd assets npm run install:all",
         "cmd --cd assets node build.js --deploy",
         "phx.digest"
       ]
