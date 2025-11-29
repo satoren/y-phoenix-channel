@@ -26,6 +26,6 @@
     "@types/react-dom": "19.1.9",
     "esbuild": "0.25.12",
     "esbuild-sass-plugin": "3.3.1",
-    "vitest": "4.0.7"
+    "vitest": "4.0.14"
   }
 }
