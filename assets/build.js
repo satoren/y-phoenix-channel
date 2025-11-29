@@ -15,14 +15,14 @@ const plugins = [sassPlugin()];
 // Define esbuild options
 let opts = {
   entryPoints: [
-    "js/app.js",
-    "js/quill.ts",
-    "js/blocknote.tsx",
-    "js/excalidraw.tsx",
-    "js/js-draw.tsx",
-    "js/lexical.tsx",
-    "js/tiptap.tsx",
-    "js/prosemirror.tsx",
+     "js/app.js",
+     "js/quill/quill.ts",
+     "js/blocknote/blocknote.tsx",
+     "js/excalidraw/excalidraw.tsx",
+     "js/js-draw/js-draw.tsx",
+     "js/lexical/lexical.tsx",
+     "js/tiptap/tiptap.tsx",
+     "js/prosemirror/prosemirror.tsx",
   ],
   bundle: true,
   logLevel: "info",

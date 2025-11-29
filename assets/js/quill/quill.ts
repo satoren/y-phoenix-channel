@@ -6,7 +6,7 @@ import { QuillBinding } from "y-quill";
 import { IndexeddbPersistence } from "y-indexeddb";
 
 import { Socket } from "phoenix";
-import { PhoenixChannelProvider } from "./y-phoenix-channel";
+import { PhoenixChannelProvider } from "../y-phoenix-channel";
 import { generateUsername } from "friendly-username-generator";
 
 Quill.register("modules/cursors", QuillCursors);
@@ -16,9 +16,6 @@ socket.connect();
 const ydoc = new Y.Doc();
 
 const docname = `quill:${new URLSearchParams(window.location.search).get("docname") ?? "quill"}`;
-
-//const channel = socket.channel(`y_doc_room:${docname}`, {})
-//channel.join()
 
 const provider = new PhoenixChannelProvider(
   socket,
@@ -44,22 +41,18 @@ provider.awareness.setLocalStateField("user", {
 });
 
 const toolbarOptions = [
-  ["bold", "italic", "underline", "strike"], // toggled buttons
+  ["bold", "italic", "underline", "strike"],
   ["blockquote", "code-block"],
   ["link", "image", "video", "formula"],
-
   [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-  [{ script: "sub" }, { script: "super" }], // superscript/subscript
-  [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-  [{ direction: "rtl" }], // text direction
-
+  [{ script: "sub" }, { script: "super" }],
+  [{ indent: "-1" }, { indent: "+1" }],
+  [{ direction: "rtl" }],
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-  [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+  [{ color: [] }, { background: [] }],
   [{ font: [] }],
   [{ align: [] }],
-
-  ["clean"], // remove formatting button
+  ["clean"],
 ];
 
 const quill = new Quill("#editor", {

@@ -1,3 +1,4 @@
+// blocknote.tsx を blocknote ディレクトリに移動
 import * as React from "react";
 import "@blocknote/core/fonts/inter.css";
 import { useCreateBlockNote } from "@blocknote/react";
@@ -6,7 +7,7 @@ import * as Y from "yjs";
 import "@blocknote/mantine/style.css";
 
 import { createRoot } from "react-dom/client";
-import { PhoenixChannelProvider } from "./y-phoenix-channel";
+import { PhoenixChannelProvider } from "../y-phoenix-channel";
 import { IndexeddbPersistence } from "y-indexeddb";
 import { Socket } from "phoenix";
 import { generateUsername } from "friendly-username-generator";
