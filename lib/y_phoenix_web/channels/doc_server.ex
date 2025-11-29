@@ -18,11 +18,7 @@ defmodule YPhoenixWeb.DocServer do
 
     Presence.subscribe(topic)
 
-    user_count =
-      case Presence.list_users(topic) do
-        nil -> 0
-        users -> length(users)
-      end
+    user_count = Presence.list_users(topic) |> length()
 
     {:ok,
      state

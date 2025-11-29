@@ -7,7 +7,7 @@ defmodule YPhoenixWeb.YDocRoomChannel do
   @impl true
   def join("y_doc_room:" <> doc_name = topic, payload, socket) do
     if authorized?(payload) do
-      uid = "#{System.unique_integer()}"
+      uid = "#{node()}_#{System.unique_integer()}"
 
       YPhoenixWeb.Presence.track_user(topic, uid, %{})
 
