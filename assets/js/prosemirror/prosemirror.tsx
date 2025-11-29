@@ -69,7 +69,7 @@ const Editor = ({ ydoc, room }) => {
       });
 
       return () => {
-        provider.destroy;
+        provider.destroy();
         prosemirrorView.destroy();
       };
     };
