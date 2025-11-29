@@ -33,7 +33,7 @@ defmodule YPhoenix.MixProject do
   defp deps do
     [
       {:phoenix, "1.8.2"},
-      {:phoenix_ecto, "== 4.7.0"},
+      {:phoenix_ecto, "4.7.0"},
       {:ecto_sql, "3.13.2"},
       {:postgrex, "0.21.1"},
       {:ecto_psql_extras, "0.8.8"},
@@ -60,7 +60,7 @@ defmodule YPhoenix.MixProject do
       {:dns_cluster, "0.2.0"},
       {:bandit, "1.8.0"},
       {:rustler, "0.37.1"},
-      {:y_ex, "== 0.10.0"}
+      {:y_ex, "0.10.0"}
     ]
   end
 
