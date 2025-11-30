@@ -17,65 +17,65 @@ socket.connect();
 const docname = `lexical:${new URLSearchParams(window.location.search).get("docname") ?? "lexical"}`;
 
 function getDocFromMap(id: string, yjsDocMap: Map<string, Y.Doc>): Y.Doc {
-	let doc = yjsDocMap.get(id);
+  let doc = yjsDocMap.get(id);
 
-	if (doc === undefined) {
-		doc = new Y.Doc();
-		yjsDocMap.set(id, doc);
-	} else {
-		doc.load();
-	}
+  if (doc === undefined) {
+    doc = new Y.Doc();
+    yjsDocMap.set(id, doc);
+  } else {
+    doc.load();
+  }
 
-	return doc;
+  return doc;
 }
 
 function Editor() {
-	const initialConfig = {
-		editorState: null,
-		namespace: "Demo",
-		nodes: [],
-		onError: (error: Error) => {
-			throw error;
-		},
-		theme: {},
-	};
+  const initialConfig = {
+    editorState: null,
+    namespace: "Demo",
+    nodes: [],
+    onError: (error: Error) => {
+      throw error;
+    },
+    theme: {},
+  };
 
-	const providerFactory = useCallback(
-		(id: string, yjsDocMap: Map<string, Y.Doc>): Provider => {
-			const doc = getDocFromMap(id, yjsDocMap);
-			return new PhoenixChannelProvider(socket, `y_doc_room:${docname}`, doc, {
-				connect: false,
-			});
-		},
-		[docname],
-	);
+  const providerFactory = useCallback(
+    (id: string, yjsDocMap: Map<string, Y.Doc>): Provider => {
+      const doc = getDocFromMap(id, yjsDocMap);
+      return new PhoenixChannelProvider(socket, `y_doc_room:${docname}`, doc, {
+        connect: false,
+      });
+    },
+    [docname],
+  );
 
-	return (
-		<LexicalComposer initialConfig={initialConfig}>
-			<RichTextPlugin
-				contentEditable={<ContentEditable className="editor-input" />}
-				placeholder={
-					<div className="editor-placeholder">Enter some rich text...</div>
-				}
-				ErrorBoundary={LexicalErrorBoundary}
-			/>
-			<HistoryPlugin />
-			<CollaborationPlugin
-				id="lexical/react-rich-collab"
-				providerFactory={providerFactory}
-				shouldBootstrap={true}
-			/>
-		</LexicalComposer>
-	);
+  return (
+    <LexicalComposer initialConfig={initialConfig}>
+      <RichTextPlugin
+        contentEditable={<ContentEditable className="editor-input" />}
+        placeholder={
+          <div className="editor-placeholder">Enter some rich text...</div>
+        }
+        ErrorBoundary={LexicalErrorBoundary}
+      />
+      <HistoryPlugin />
+      <CollaborationPlugin
+        id="lexical/react-rich-collab"
+        providerFactory={providerFactory}
+        shouldBootstrap={true}
+      />
+    </LexicalComposer>
+  );
 }
 
 export default function App() {
-	return <Editor />;
+  return <Editor />;
 }
 
 const domNode = document.getElementById("root");
 if (!domNode) {
-	throw new Error("root element not found");
+  throw new Error("root element not found");
 }
 
 const root = createRoot(domNode);

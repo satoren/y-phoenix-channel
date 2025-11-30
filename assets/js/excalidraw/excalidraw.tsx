@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Excalidraw  } from "@excalidraw/excalidraw";
+import { Excalidraw } from "@excalidraw/excalidraw";
 import "@excalidraw/excalidraw/index.css";
 import * as Y from "yjs";
 import { createRoot } from "react-dom/client";
@@ -46,7 +46,7 @@ export default function App() {
       provider.awareness,
       {
         cursorDisplayTimeout: 5000,
-      }
+      },
     );
     setBindings(binding);
     return () => {
