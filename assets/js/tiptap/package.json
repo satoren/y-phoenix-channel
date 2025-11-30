@@ -5,19 +5,22 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "@tiptap/extension-character-count": "2.27.1",
-    "@tiptap/extension-collaboration": "2.27.1",
-    "@tiptap/extension-collaboration-cursor": "2.26.2",
-    "@tiptap/extension-highlight": "2.27.1",
-    "@tiptap/extension-task-item": "2.27.1",
-    "@tiptap/extension-task-list": "2.27.1",
-    "@tiptap/react": "2.27.1",
-    "@tiptap/starter-kit": "2.27.1",
+    "@tiptap/extension-collaboration": "^3.11.1",
+    "@tiptap/extension-collaboration-caret": "^3.11.1",
+    "@tiptap/extension-document": "^3.11.1",
+    "@tiptap/extension-highlight": "^3.11.1",
+    "@tiptap/extension-list": "^3.11.1",
+    "@tiptap/extension-paragraph": "^3.11.1",
+    "@tiptap/extension-text": "^3.11.1",
+    "@tiptap/extensions": "^3.11.1",
+    "@tiptap/react": "^3.11.1",
+    "@tiptap/starter-kit": "^3.11.1",
+    "@tiptap/y-tiptap": "^3.0.1",
     "friendly-username-generator": "2.0.4",
     "phoenix": "1.8.2",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "yjs": "13.6.27",
-    "y-phoenix-channel": "0.1.1"
+    "y-phoenix-channel": "0.1.1",
+    "yjs": "13.6.27"
   }
 }

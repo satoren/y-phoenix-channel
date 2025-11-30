@@ -1,9 +1,11 @@
-import CharacterCount from "@tiptap/extension-character-count";
+import { TaskItem } from "@tiptap/extension-list";
 import Collaboration from "@tiptap/extension-collaboration";
-import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
-import Highlight from "@tiptap/extension-highlight";
-import TaskItem from "@tiptap/extension-task-item";
-import TaskList from "@tiptap/extension-task-list";
+import CollaborationCaret from "@tiptap/extension-collaboration-caret";
+
+import { CharacterCount } from "@tiptap/extensions";
+
+import { Highlight } from "@tiptap/extension-highlight";
+import { TaskList } from "@tiptap/extension-list";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, { useCallback, useEffect, useState } from "react";
@@ -72,7 +74,7 @@ const defaultContent = `
   <p>Feel free to edit and collaborate in real-time!</p>
 `;
 
-const getRandomElement = (list) =>
+const getRandomElement = <T,>(list: T[]) =>
   list[Math.floor(Math.random() * list.length)];
 
 const getRandomColor = () => getRandomElement(colors);
@@ -85,7 +87,15 @@ const getInitialUser = () => {
   };
 };
 
-const Editor = ({ ydoc, provider, room }) => {
+const Editor = ({
+  ydoc,
+  provider,
+  room,
+}: {
+  ydoc: Y.Doc;
+  provider: PhoenixChannelProvider;
+  room: string;
+}) => {
   const [status, setStatus] = useState("connecting");
   const [currentUser, setCurrentUser] = useState(getInitialUser);
 
@@ -94,16 +104,9 @@ const Editor = ({ ydoc, provider, room }) => {
     onContentError: ({ disableCollaboration }) => {
       disableCollaboration();
     },
-    onCreate: ({ editor: currentEditor }) => {
-      provider.on("synced", () => {
-        if (currentEditor.isEmpty) {
-          currentEditor.commands.setContent(defaultContent);
-        }
-      });
-    },
     extensions: [
       StarterKit.configure({
-        history: false,
+        undoRedo: false,
       }),
       Highlight,
       TaskList,
@@ -114,15 +117,18 @@ const Editor = ({ ydoc, provider, room }) => {
       Collaboration.extend().configure({
         document: ydoc,
       }),
-      CollaborationCursor.extend().configure({
+      CollaborationCaret.configure({
         provider,
+        user: currentUser,
       }),
     ],
   });
 
   useEffect(() => {
     // Update status changes
-    const statusHandler = (event) => {
+    const statusHandler = (event: {
+      status: "connecting" | "connected" | "disconnected";
+    }) => {
       setStatus(event.status);
     };
 
@@ -133,13 +139,20 @@ const Editor = ({ ydoc, provider, room }) => {
     };
   }, [provider]);
 
-  // Save current user to localStorage and emit to editor
   useEffect(() => {
-    if (editor && currentUser) {
-      localStorage.setItem("currentUser", JSON.stringify(currentUser));
-      editor.chain().focus().updateUser(currentUser).run();
-    }
-  }, [editor, currentUser]);
+    provider.on("sync", () => {
+      // The onSynced callback ensures initial content is set only once using editor.setContent(), preventing repetitive content loading on editor syncs.
+
+      if (!ydoc.getMap("config").get("initialContentLoaded") && editor) {
+        ydoc.getMap("config").set("initialContentLoaded", true);
+
+        editor.commands.setContent(`
+          <p>This is a radically reduced version of Tiptap. It has support for a document, with paragraphs and text. That’s it. It’s probably too much for real minimalists though.</p>
+          <p>The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.</p>
+          `);
+      }
+    });
+  }, [provider, editor]);
 
   const setName = useCallback(() => {
     const name = (window.prompt("Name", currentUser.name) || "")
@@ -198,10 +211,11 @@ const Editor = ({ ydoc, provider, room }) => {
         className="collab-status-group"
         data-state={status === "connected" ? "online" : "offline"}
       >
+        {" "}
         <label>
           {status === "connected"
-            ? `${editor.storage.collaborationCursor.users.length} user${
-                editor.storage.collaborationCursor.users.length === 1 ? "" : "s"
+            ? `${editor.storage.collaborationCaret.users.length} user${
+                editor.storage.collaborationCaret.users.length === 1 ? "" : "s"
               } online in ${room}`
             : "offline"}
         </label>
