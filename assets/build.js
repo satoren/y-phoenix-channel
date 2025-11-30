@@ -14,16 +14,16 @@ const plugins = [sassPlugin()];
 
 // Define esbuild options
 let opts = {
-    entryPoints: [
-      { in: "js/app.js", out: "app" },
-      { in: "js/quill/quill.ts", out: "quill" },
-      { in: "js/blocknote/blocknote.tsx", out: "blocknote" },
-      { in: "js/excalidraw/excalidraw.tsx", out: "excalidraw" },
-      { in: "js/js-draw/js-draw.tsx", out: "js-draw" },
-      { in: "js/lexical/lexical.tsx", out: "lexical" },
-      { in: "js/tiptap/tiptap.tsx", out: "tiptap" },
-      { in: "js/prosemirror/prosemirror.tsx", out: "prosemirror" },
-    ],
+  entryPoints: [
+    { in: "js/app.js", out: "app" },
+    { in: "js/quill/quill.ts", out: "quill" },
+    { in: "js/blocknote/blocknote.tsx", out: "blocknote" },
+    { in: "js/excalidraw/excalidraw.tsx", out: "excalidraw" },
+    { in: "js/js-draw/js-draw.tsx", out: "js-draw" },
+    { in: "js/lexical/lexical.tsx", out: "lexical" },
+    { in: "js/tiptap/tiptap.tsx", out: "tiptap" },
+    { in: "js/prosemirror/prosemirror.tsx", out: "prosemirror" },
+  ],
   bundle: true,
   logLevel: "info",
   target: "es2017",

@@ -85,7 +85,7 @@ export class ExcalidrawBinding {
         .filter(isValidElement);
 
       this.lastVersion = hashElementsVersion(initialValue);
-      this.#api.updateScene({ elements: initialValue,  captureUpdate: "NEVER" });
+      this.#api.updateScene({ elements: initialValue, captureUpdate: "NEVER" });
     };
 
     // Listen for local changes in Excalidraw and sync to Y.js
@@ -103,18 +103,20 @@ export class ExcalidrawBinding {
 
           const version = hashElementsVersion(elements);
           if (version !== this.lastVersion) {
+            const gcAssetFiles = () => {
+              const usedFileIds = new Set([
+                ...elements
+                  .map((e) => (e.type === "image" ? e.fileId : null))
+                  .filter((f): f is FileId => f !== null),
+              ]);
 
-            const gcAssetFiles = ()=>{
-            const usedFileIds = new Set([
-              ...elements.map(e => e.type === "image" ? e.fileId : null).filter((f): f is FileId => f !== null),
-            ]);
-
-
-            const deletedFileIds = this.#yAssets.yarray.map(d => d.key).filter(id => !usedFileIds.has(id as FileId));
+              const deletedFileIds = this.#yAssets.yarray
+                .map((d) => d.key)
+                .filter((id) => !usedFileIds.has(id as FileId));
               for (const id of deletedFileIds) {
                 this.#yAssets.delete(id);
               }
-            }
+            };
 
             this.#yElements.doc?.transact(() => {
               // check deletion
@@ -139,11 +141,10 @@ export class ExcalidrawBinding {
             this.lastVersion = version;
 
             gcAssetFiles();
-
           }
           if (files) {
             const newFiles = Object.entries(files).filter(([id, file]) => {
-              return this.#yAssets.get(id) == null
+              return this.#yAssets.get(id) == null;
             });
 
             this.#yAssets.doc?.transact(() => {
@@ -428,12 +429,15 @@ function throttle<T extends (...args: any[]) => void>(
       if (lastFunc) {
         clearTimeout(lastFunc);
       }
-      lastFunc = setTimeout(() => {
-        if (Date.now() - (lastRan as number) >= limit) {
-          func.apply(this, args);
-          lastRan = Date.now();
-        }
-      }, limit - (Date.now() - lastRan));
+      lastFunc = setTimeout(
+        () => {
+          if (Date.now() - (lastRan as number) >= limit) {
+            func.apply(this, args);
+            lastRan = Date.now();
+          }
+        },
+        limit - (Date.now() - lastRan),
+      );
     }
   } as T;
 }

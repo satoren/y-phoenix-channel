@@ -237,7 +237,7 @@ const docname = `tiptap:${
 const provider = new PhoenixChannelProvider(
   socket,
   `y_doc_room:${docname}`,
-  ydoc
+  ydoc,
 );
 
 const App = () => {
