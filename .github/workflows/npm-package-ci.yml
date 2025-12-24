@@ -2,10 +2,14 @@ name: NPM Package CI
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "npm/y-phoenix-channel/**"
       - ".github/workflows/npm-package-ci.yml"
   pull_request:
+    branches:
+      - main
     paths:
       - "npm/y-phoenix-channel/**"
       - ".github/workflows/npm-package-ci.yml"
@@ -35,12 +39,16 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: npm/y-phoenix-channel
 
       - name: Type check
         run: npm run typecheck
+        working-directory: npm/y-phoenix-channel
 
       - name: Build
         run: npm run build
+        working-directory: npm/y-phoenix-channel
 
       - name: Run tests
         run: npm test -- --run
+        working-directory: npm/y-phoenix-channel
