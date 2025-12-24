@@ -1,0 +1,46 @@
+name: NPM Package CI
+
+on:
+  push:
+    paths:
+      - "npm/y-phoenix-channel/**"
+      - ".github/workflows/npm-package-ci.yml"
+  pull_request:
+    paths:
+      - "npm/y-phoenix-channel/**"
+      - ".github/workflows/npm-package-ci.yml"
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify package
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: npm/y-phoenix-channel
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+          cache: npm
+          cache-dependency-path: npm/y-phoenix-channel/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Run tests
+        run: npm test -- --run
