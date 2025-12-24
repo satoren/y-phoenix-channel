@@ -6,15 +6,15 @@
 
 import type * as Y from "yjs";
 import { mergeUpdates } from "yjs";
-import * as bc from "lib0/broadcastchannel.js";
-import * as time from "lib0/time.js";
-import * as encoding from "lib0/encoding.js";
-import * as decoding from "lib0/decoding.js";
-import * as syncProtocol from "@y/protocols/sync.js";
-import * as awarenessProtocol from "@y/protocols/awareness.js";
-import { ObservableV2 } from 'lib0/observable.js'
-import * as env from "lib0/environment.js";
-import type { Socket, Channel } from "phoenix";
+import * as bc from "lib0/broadcastchannel";
+import * as time from "lib0/time";
+import * as encoding from "lib0/encoding";
+import * as decoding from "lib0/decoding";
+import * as syncProtocol from "y-protocols/sync";
+import * as awarenessProtocol from "y-protocols/awareness";
+import { ObservableV2 } from "lib0/observable";
+import * as env from "lib0/environment";
+import type { Socket, Channel, Push } from "phoenix";
 
 declare module "phoenix" {
   interface Channel {
@@ -22,7 +22,6 @@ declare module "phoenix" {
     joinPush: Push;
   }
 }
-
 
 export const messageSync = 0;
 export const messageQueryAwareness = 3;
@@ -109,7 +108,7 @@ const readMessage = (
   const encoder = encoding.createEncoder();
   const messageType = decoding.readVarUint(decoder);
   const messageHandler = provider.messageHandlers[messageType];
-  if (/** @type {any} */ (messageHandler)) {
+  if (/** @type {any} */ messageHandler) {
     messageHandler(encoder, decoder, provider, emitSynced, messageType);
   } else {
     console.error("Unable to compute message");
@@ -117,7 +116,7 @@ const readMessage = (
   return encoder;
 };
 
-const setupChannel = (provider: PhoenixChannelProvider) => {
+const setupChannel = (provider: PhoenixChannelProvider, joinPush: Push) => {
   if (provider.shouldConnect && provider.channel != null) {
     provider.channel.onError(() => {
       provider.emit("status", [
@@ -165,7 +164,7 @@ const setupChannel = (provider: PhoenixChannelProvider) => {
         status: "connecting",
       },
     ]);
-      const handleJoined = () => {
+    const handleJoined = () => {
       provider.emit("status", [
         {
           status: "connected",
@@ -196,24 +195,22 @@ const setupChannel = (provider: PhoenixChannelProvider) => {
       }
     };
 
-    
-
     switch (provider.channel.state) {
-      case 'joined':
-        handleJoined()
-        break
-      case 'joining':
-        provider.emit('status', [
+      case "joined":
+        handleJoined();
+        break;
+      case "joining":
+        provider.emit("status", [
           {
-            status: 'connecting'
-          }
-        ])
-        break
+            status: "connecting",
+          },
+        ]);
+        break;
 
       default:
-        break
+        break;
     }
-    provider.channel.joinPush.receive('ok', handleJoined)
+    joinPush.receive("ok", handleJoined);
   }
 };
 
@@ -235,33 +232,38 @@ const broadcastMessage = (
 };
 
 type EventMap = {
-  'connection-close': (event: CloseEvent | null,  provider: PhoenixChannelProvider) => any,
-  'status': (event: { status: 'connected' | 'disconnected' | 'connecting' }) => any,
-  'connection-error': (event: Event, provider: PhoenixChannelProvider) => any,
-  'sync': (state: boolean) => any
-}
+  "connection-close": (
+    event: CloseEvent | null,
+    provider: PhoenixChannelProvider,
+  ) => any;
+  status: (event: {
+    status: "connected" | "disconnected" | "connecting";
+  }) => any;
+  "connection-error": (event: Event, provider: PhoenixChannelProvider) => any;
+  sync: (state: boolean) => any;
+};
 
 type Options = {
   /** Whether to connect automatically (default: `true`) */
-  connect?: boolean,
+  connect?: boolean;
   /** Awareness instance */
-  awareness?: awarenessProtocol.Awareness,
+  awareness?: awarenessProtocol.Awareness;
   /** Channel join parameters */
-  params?: object,
+  params?: object;
   /** Interval (ms) to resync server state. Disabled when <= 0 */
-  resyncInterval?: number,
+  resyncInterval?: number;
   /** Throttle interval (ms) for document update broadcasts. Disabled when <= 0 (default) */
-  updateThrottle?: number,
+  updateThrottle?: number;
   /** Throttle interval (ms) for awareness update broadcasts. Disabled when <= 0 (default) */
-  awarenessThrottle?: number,
+  awarenessThrottle?: number;
   /** Disable cross-tab BroadcastChannel communication */
-  disableBc?: boolean,
+  disableBc?: boolean;
   /**
    * External channel instance to use instead of creating a new one.
    * Useful when the channel is created outside the provider and the joined event cannot be received.
    */
-  channel?: Channel
-}
+  channel?: Channel;
+};
 
 /**
  * PhoenixChannelProvider for Yjs. This provider synchronizes Yjs documents using Phoenix Channels.
@@ -301,7 +303,10 @@ export class PhoenixChannelProvider extends ObservableV2<EventMap> {
   wsLastMessageReceived: number;
   shouldConnect: boolean;
   _resyncInterval: ReturnType<typeof setInterval> | null = null;
-  _updateThrottler: Throttler<Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>[]>;
+  _updateThrottler: Throttler<
+    Uint8Array<ArrayBuffer>,
+    Uint8Array<ArrayBuffer>[]
+  >;
   _awarenessThrottler: Throttler<number[], Set<number>>;
   _bcSubscriber: (data: any, origin: any) => void;
   _updateHandler: (update: any, origin: any) => void;
@@ -391,19 +396,15 @@ export class PhoenixChannelProvider extends ObservableV2<EventMap> {
     this.shouldConnect = connect;
 
     if (resyncInterval > 0) {
-      this._resyncInterval = 
-        setInterval(() => {
-          if (this.channel && this.channel.state == "joined") {
-            // resend sync step 1
-            const encoder = encoding.createEncoder();
-            encoding.writeVarUint(encoder, messageSync);
-            syncProtocol.writeSyncStep1(encoder, doc);
-            this.channel.push(
-              "yjs_sync",
-              encoding.toUint8Array(encoder).buffer,
-            );
-          }
-        }, resyncInterval)
+      this._resyncInterval = setInterval(() => {
+        if (this.channel && this.channel.state == "joined") {
+          // resend sync step 1
+          const encoder = encoding.createEncoder();
+          encoding.writeVarUint(encoder, messageSync);
+          syncProtocol.writeSyncStep1(encoder, doc);
+          this.channel.push("yjs_sync", encoding.toUint8Array(encoder).buffer);
+        }
+      }, resyncInterval);
     }
 
     /**
@@ -465,7 +466,7 @@ export class PhoenixChannelProvider extends ObservableV2<EventMap> {
   set synced(state) {
     if (this._synced !== state) {
       this._synced = state;
-      // @ts-expect-error 
+      // @ts-expect-error
       this.emit("synced", [state]);
       this.emit("sync", [state]);
     }
@@ -498,9 +499,7 @@ export class PhoenixChannelProvider extends ObservableV2<EventMap> {
     const mergedUpdate =
       pendingUpdates.length === 1
         ? pendingUpdates[0]
-        : mergeUpdates(
-            pendingUpdates,
-          );
+        : mergeUpdates(pendingUpdates);
     this._sendDocumentUpdate(mergedUpdate as Uint8Array<ArrayBuffer>);
   }
 
@@ -604,20 +603,19 @@ export class PhoenixChannelProvider extends ObservableV2<EventMap> {
     this.shouldConnect = true;
     if (this.channel == null) {
       if (this.defaultChannel !== undefined) {
-        this.channel = this.defaultChannel
+        this.channel = this.defaultChannel;
+        setupChannel(this, this.channel.joinPush);
       } else {
-        this.channel = this.socket.channel(this.roomname, this.params)
-        this.channel.join()
+        this.channel = this.socket.channel(this.roomname, this.params);
+
+        setupChannel(this, this.channel.join());
       }
-      setupChannel(this);
       this.connectBc();
     }
   }
 }
 
-
-
- type ThrottlerOptions<TInput, TPending> = {
+type ThrottlerOptions<TInput, TPending> = {
   interval: number;
   createPending: () => TPending;
   hasPending: (pending: TPending) => boolean;
@@ -627,7 +625,7 @@ export class PhoenixChannelProvider extends ObservableV2<EventMap> {
   now?: () => number;
 };
 
- class Throttler<TInput, TPending> {
+class Throttler<TInput, TPending> {
   private _interval: number;
   private _pending: TPending;
   private _timer: ReturnType<typeof setTimeout> | null = null;

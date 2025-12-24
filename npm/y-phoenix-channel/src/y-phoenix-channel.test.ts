@@ -2,7 +2,8 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import * as Y from 'yjs'
 import * as encoding from 'lib0/encoding.js'
 import * as decoding from 'lib0/decoding.js'
-import * as syncProtocol from '@y/protocols/sync.js'
+import * as syncProtocol from 'y-protocols/sync'
+import * as awarenessProtocol from 'y-protocols/awareness'
 import { PhoenixChannelProvider, messageSync } from './y-phoenix-channel'
 import type { Socket, Channel } from 'phoenix'
 
@@ -143,7 +144,7 @@ describe('PhoenixChannelProvider', () => {
 
     it('should accept custom awareness', () => {
       const customDoc = new Y.Doc()
-      const customAwareness = new provider.awareness.constructor(customDoc)
+      const customAwareness = new awarenessProtocol.Awareness(customDoc)
       const customProvider = new PhoenixChannelProvider(
         socket,
         'test-room',
@@ -324,15 +325,20 @@ describe('PhoenixChannelProvider', () => {
     })
 
     it('should emit awareness update events', () => {
-      return new Promise<void>((resolve) => {
-        const updateHandler = vi.fn()
-        provider.on('sync', updateHandler)
-        
+      return new Promise<void>((resolve, reject) => {
+        const updateHandler = vi.fn(() => {
+          try {
+            expect(updateHandler).toHaveBeenCalled()
+            resolve()
+          } catch (error) {
+            reject(error)
+          } finally {
+            provider.awareness.off('update', updateHandler)
+          }
+        })
+
+        provider.awareness.on('update', updateHandler)
         provider.awareness.setLocalState({ user: 'testUser' })
-        
-        setTimeout(() => {
-          resolve()
-        }, 50)
       })
     })
   })
