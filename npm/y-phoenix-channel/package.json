@@ -9,7 +9,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "keywords": [
     "yjs",
@@ -46,7 +49,10 @@
     "@types/node": "24.10.13",
     "@types/phoenix": "1.6.7",
     "tsup": "8.5.1",
+    "happy-dom": "^20.8.3",
     "typescript": "5.9.3",
-    "yjs": "14.0.0-16"
+    "vitest": "^4.0.18",
+    "yjs": "14.0.0-16",
+    "msw-phoenix.channel-binding":"0.2.1"
   }
 }
