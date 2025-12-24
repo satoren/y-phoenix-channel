@@ -26,10 +26,10 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - run: npm ci
-        working-directory: npm/y-phoenix-channel'
+        working-directory: npm/y-phoenix-channel
       - run: npm run build --if-present
-        working-directory: npm/y-phoenix-channel'
+        working-directory: npm/y-phoenix-channel
       - run: npm test
-        working-directory: npm/y-phoenix-channel'
+        working-directory: npm/y-phoenix-channel
       - run: npm publish
-        working-directory: npm/y-phoenix-channel'
+        working-directory: npm/y-phoenix-channel
