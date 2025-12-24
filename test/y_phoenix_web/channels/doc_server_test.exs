@@ -49,7 +49,7 @@ defmodule YPhoenixWeb.DocServerTest do
         state
       )
 
-    refute_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "yjs"}, 10
+    refute_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "yjs"}, 100
 
     {:noreply, state} = YPhoenixWeb.DocServer.handle_info(:flush_awareness, state)
 
@@ -107,7 +107,7 @@ defmodule YPhoenixWeb.DocServerTest do
 
     {:noreply, _state} = YPhoenixWeb.DocServer.handle_info(:flush_awareness, state)
 
-    refute_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "yjs"}, 10
+    refute_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "yjs"}, 100
   end
 
   test "trailing awareness falls back to broadcast when pending origins are mixed" do
@@ -161,6 +161,8 @@ defmodule YPhoenixWeb.DocServerTest do
         nil,
         state
       )
+
+    refute_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "yjs"}, 20
 
     {:noreply, _state} = YPhoenixWeb.DocServer.handle_info(:flush_awareness, state)
 

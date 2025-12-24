@@ -214,6 +214,10 @@ defmodule YPhoenixWeb.DocServer do
     topic = state.assigns.topic
     trailing_origin = resolve_pending_origin(state.assigns.awareness_pending_origin)
 
+    if state.assigns.awareness_flush_timer_ref do
+      Process.cancel_timer(state.assigns.awareness_flush_timer_ref)
+    end
+
     state =
       assign(state, %{
         awareness_window_open: false,
