@@ -118,7 +118,10 @@ const readMessage = (
 
 const setupChannel = (provider: PhoenixChannelProvider, joinPush: Push) => {
   if (provider.shouldConnect && provider.channel != null) {
+    let hasHandledJoinInCurrentCycle = false;
+
     provider.channel.onError(() => {
+      hasHandledJoinInCurrentCycle = false;
       provider.emit("status", [
         {
           status: "disconnected",
@@ -135,6 +138,7 @@ const setupChannel = (provider: PhoenixChannelProvider, joinPush: Push) => {
       );
     });
     provider.channel.onClose(() => {
+      hasHandledJoinInCurrentCycle = false;
       provider.emit("status", [
         {
           status: "disconnected",
@@ -171,6 +175,11 @@ const setupChannel = (provider: PhoenixChannelProvider, joinPush: Push) => {
         },
       ]);
 
+        if (hasHandledJoinInCurrentCycle) {
+          return;
+        }
+        hasHandledJoinInCurrentCycle = true;
+
       const encoder = encoding.createEncoder();
       encoding.writeVarUint(encoder, messageSync);
       syncProtocol.writeSyncStep1(encoder, provider.doc);
@@ -196,9 +205,6 @@ const setupChannel = (provider: PhoenixChannelProvider, joinPush: Push) => {
     };
 
     switch (provider.channel.state) {
-      case "joined":
-        handleJoined();
-        break;
       case "joining":
         provider.emit("status", [
           {
