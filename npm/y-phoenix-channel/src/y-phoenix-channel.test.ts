@@ -14,9 +14,8 @@ class MockChannelBuilder {
   private errorListeners: Function[] = []
   private closeListeners: Function[] = []
   private pushHandler = vi.fn()
-  private joinFn = vi.fn()
   private leaveFn = vi.fn()
-  private joinPushReceiver: ((event: string, callback: Function) => void) | null = null
+  private joinPushReceiver: Function | null = null
 
   withState(state: string): MockChannelBuilder {
     this.state = state
@@ -33,6 +32,16 @@ class MockChannelBuilder {
 
   build(): Channel {
     const self = this
+    const joinPush = {
+      receive: vi.fn((event: string, callback: Function) => {
+        if (event === 'ok') {
+          self.joinPushReceiver = callback
+          callback()
+        }
+        return joinPush
+      }),
+    }
+
     return {
       state: this.state,
       push: this.pushHandler,
@@ -49,15 +58,8 @@ class MockChannelBuilder {
         self.closeListeners.push(callback)
       }),
       leave: this.leaveFn,
-      join: this.joinFn,
-      joinPush: {
-        receive: vi.fn((event: string, callback: Function) => {
-          self.joinPushReceiver = callback as any
-          if (event === 'ok') {
-            callback()
-          }
-        }),
-      } as any,
+      join: vi.fn(() => joinPush),
+      joinPush: joinPush as any,
       _triggerMessage: (event: string, data: any) => {
         self.listeners[event]?.forEach(cb => cb(data))
       },
