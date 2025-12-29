@@ -72,14 +72,14 @@ defmodule YPhoenixWeb.YDocRoomChannel do
   end
 
   defp start_shared_doc(topic, doc_name) do
-    case :global.whereis_name({__MODULE__, doc_name}) do
+    case :syn.lookup(:doc_servers, doc_name) do
+      {pid, _metadata} ->
+        {:ok, pid}
+
       :undefined ->
         DocServer.start([topic: topic, doc_name: doc_name, persistence: YPhoenix.EctoPersistence],
-          name: {:global, {__MODULE__, doc_name}}
+          name: {:via, :syn, {:doc_servers, doc_name}}
         )
-
-      pid ->
-        {:ok, pid}
     end
     |> case do
       {:ok, pid} ->
