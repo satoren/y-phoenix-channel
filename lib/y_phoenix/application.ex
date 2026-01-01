@@ -7,6 +7,9 @@ defmodule YPhoenix.Application do
 
   @impl true
   def start(_type, _args) do
+    # Initialize Syn scopes for distributed DocServer registry
+    :syn.add_node_to_scopes([:doc_servers])
+
     children = [
       YPhoenixWeb.Telemetry,
       YPhoenix.Repo,
