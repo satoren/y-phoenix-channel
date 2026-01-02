@@ -38,7 +38,7 @@ defmodule YPhoenix.MixProject do
       {:postgrex, "0.21.1"},
       {:ecto_psql_extras, "0.8.8"},
       {:phoenix_html, "4.3.0"},
-      {:phoenix_live_reload, "1.6.1", only: :dev},
+      {:phoenix_live_reload, "== 1.6.2", only: :dev},
       # TODO bump on release to {:phoenix_live_view, "~> 1.0.0"},
       {:phoenix_live_view, "1.1.18", override: true},
       {:floki, "0.38.0", only: :test},
