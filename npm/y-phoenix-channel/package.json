@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@types/node": "24.10.1",
-    "@types/phoenix": "1.6.6",
+    "@types/phoenix": "1.6.7",
     "tsup": "8.5.1",
     "typescript": "5.9.3",
     "yjs": "14.0.0-16"

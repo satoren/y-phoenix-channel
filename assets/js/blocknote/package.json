@@ -15,7 +15,7 @@
     "@blocknote/mantine": "0.44.1",
     "@blocknote/react": "0.44.1",
     "friendly-username-generator": "2.0.4",
-    "phoenix": "1.8.2",
+    "phoenix": "1.8.3",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "y-indexeddb": "9.0.12",
