@@ -13,7 +13,7 @@
   "dependencies": {
     "@excalidraw/excalidraw": "0.18.0",
     "friendly-username-generator": "2.0.4",
-    "phoenix": "1.8.2",
+    "phoenix": "1.8.3",
     "y-indexeddb": "9.0.12",
     "yjs": "13.6.27",
     "y-protocols": "1.0.7",
