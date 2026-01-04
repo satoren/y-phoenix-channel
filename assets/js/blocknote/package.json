@@ -16,8 +16,8 @@
     "@blocknote/react": "0.44.1",
     "friendly-username-generator": "2.0.4",
     "phoenix": "1.8.3",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "y-indexeddb": "9.0.12",
     "yjs": "13.6.28",
     "y-phoenix-channel": "0.1.1"
