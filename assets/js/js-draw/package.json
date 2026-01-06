@@ -17,7 +17,7 @@
     "js-draw": "1.31.1",
     "phoenix": "1.8.3",
     "y-indexeddb": "9.0.12",
-    "yjs": "13.6.28",
+    "yjs": "13.6.29",
     "y-protocols": "1.0.7",
     "y-phoenix-channel": "0.1.1"
   }

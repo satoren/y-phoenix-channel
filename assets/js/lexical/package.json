@@ -17,7 +17,7 @@
     "lexical": "0.39.0",
     "phoenix": "1.8.3",
     "react": "19.2.3",
-    "yjs": "13.6.28",
+    "yjs": "13.6.29",
     "react-dom": "19.2.3",
     "y-phoenix-channel": "0.1.1"
   }
