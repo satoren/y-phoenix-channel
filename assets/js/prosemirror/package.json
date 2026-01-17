@@ -16,7 +16,7 @@
     "prosemirror-keymap": "1.2.3",
     "prosemirror-schema-basic": "1.2.4",
     "prosemirror-state": "1.4.4",
-    "prosemirror-view": "1.41.4",
+    "prosemirror-view": "1.41.5",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "yjs": "13.6.29",
