@@ -59,7 +59,7 @@ defmodule YPhoenix.MixProject do
       {:jason, "1.4.4"},
       {:dns_cluster, "0.2.0"},
       {:bandit, "1.10.2"},
-      {:rustler, "0.37.1"},
+      {:rustler, "== 0.37.3"},
       {:y_ex, "0.10.2"},
       {:syn, "3.3.0"}
     ]
