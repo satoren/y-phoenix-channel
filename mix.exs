@@ -61,7 +61,7 @@ defmodule YPhoenix.MixProject do
       {:bandit, "1.10.2"},
       {:rustler, "0.37.3"},
       {:y_ex, "0.10.2"},
-      {:syn, "3.3.0"}
+      {:syn, "== 3.4.0"}
     ]
   end
 
