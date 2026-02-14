@@ -35,7 +35,7 @@
     }
   },
   "dependencies": {
-    "@y/protocols": "1.0.6-3",
+    "@y/protocols": "1.0.6-rc.0",
     "lib0": "0.2.117"
   },
   "peerDependencies": {
