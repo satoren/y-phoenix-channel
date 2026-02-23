@@ -32,7 +32,7 @@ defmodule YPhoenix.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "== 1.8.4"},
+      {:phoenix, "1.8.4"},
       {:phoenix_ecto, "4.7.0"},
       {:ecto_sql, "3.13.4"},
       {:postgrex, "0.22.0"},
