@@ -13,7 +13,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "topbar": "3.0.0"
+    "topbar": "3.0.1"
   },
   "devDependencies": {
     "@types/phoenix": "1.6.7",
