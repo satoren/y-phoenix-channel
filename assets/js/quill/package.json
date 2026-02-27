@@ -12,7 +12,7 @@
   "type": "module",
   "dependencies": {
     "friendly-username-generator": "2.0.4",
-    "phoenix": "1.8.3",
+    "phoenix": "1.8.4",
     "quill": "2.0.3",
     "quill-cursors": "4.0.4",
     "y-indexeddb": "9.0.12",

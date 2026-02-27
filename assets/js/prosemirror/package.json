@@ -11,7 +11,7 @@
   "author": "",
   "type": "module",
   "dependencies": {
-    "phoenix": "1.8.3",
+    "phoenix": "1.8.4",
     "prosemirror-example-setup": "1.2.3",
     "prosemirror-keymap": "1.2.3",
     "prosemirror-schema-basic": "1.2.4",
