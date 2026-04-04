@@ -41,7 +41,7 @@ defmodule YPhoenix.MixProject do
       {:phoenix_live_reload, "1.6.2", only: :dev},
       # TODO bump on release to {:phoenix_live_view, "~> 1.0.0"},
       {:phoenix_live_view, "1.1.25", override: true},
-      {:floki, "0.38.0", only: :test},
+      {:floki, "== 0.38.1", only: :test},
       {:phoenix_live_dashboard, "0.8.7"},
       {:tailwind, "0.4.1", runtime: Mix.env() == :dev},
       {:heroicons,
