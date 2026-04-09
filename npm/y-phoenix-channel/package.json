@@ -1,6 +1,6 @@
 {
   "name": "y-phoenix-channel",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Phoenix Channel provider for Yjs collaborative editing.",
   "main": "dist/y-phoenix-channel.js",
   "types": "dist/y-phoenix-channel.d.ts",
