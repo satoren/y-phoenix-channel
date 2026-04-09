@@ -19,7 +19,7 @@
     "@types/phoenix": "1.6.7",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "esbuild": "0.27.5",
+    "esbuild": "0.28.0",
     "esbuild-sass-plugin": "3.7.0",
     "vitest": "4.0.18"
   }
