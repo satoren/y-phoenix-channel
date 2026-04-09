@@ -9,7 +9,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "keywords": [
     "yjs",
@@ -35,7 +39,7 @@
     }
   },
   "dependencies": {
-    "@y/protocols": "1.0.6-rc.1",
+    "y-protocols": "1.0.6",
     "lib0": "0.2.117"
   },
   "peerDependencies": {
@@ -46,7 +50,10 @@
     "@types/node": "24.10.13",
     "@types/phoenix": "1.6.7",
     "tsup": "8.5.1",
+    "happy-dom": "^20.8.3",
     "typescript": "5.9.3",
-    "yjs": "14.0.0-16"
+    "vitest": "^4.0.18",
+    "yjs": "^13.6.26",
+    "msw-phoenix.channel-binding":"0.2.1"
   }
 }
