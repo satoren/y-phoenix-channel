@@ -54,6 +54,6 @@
     "typescript": "5.9.3",
     "vitest": "^4.0.18",
     "yjs": "^13.6.26",
-    "msw-phoenix.channel-binding":"0.2.1"
+    "msw-phoenix.channel-binding":"0.3.1"
   }
 }
