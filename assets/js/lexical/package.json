@@ -19,6 +19,6 @@
     "react": "19.2.4",
     "yjs": "13.6.30",
     "react-dom": "19.2.4",
-    "y-phoenix-channel": "0.1.1"
+    "y-phoenix-channel": "0.2.1"
   }
 }
