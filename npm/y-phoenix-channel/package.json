@@ -39,8 +39,8 @@
     }
   },
   "dependencies": {
-    "y-protocols": "^1.0.7",
-    "lib0": "^0.2.117"
+    "y-protocols": "1.0.7",
+    "lib0": "0.2.117"
   },
   "peerDependencies": {
     "phoenix": "^1",
@@ -50,10 +50,10 @@
     "@types/node": "24.10.13",
     "@types/phoenix": "1.6.7",
     "tsup": "8.5.1",
-    "happy-dom": "^20.8.3",
+    "happy-dom": "20.8.9",
     "typescript": "5.9.3",
-    "vitest": "^4.0.18",
-    "yjs": "^13.6.26",
+    "vitest": "4.1.3",
+    "yjs": "13.6.30",
     "msw-phoenix.channel-binding":"0.3.1"
   }
 }
