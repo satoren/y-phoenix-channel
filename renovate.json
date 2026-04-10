@@ -14,18 +14,6 @@
       "automerge": true
     },
     {
-      "matchPaths": [
-        "npm/y-phoenix-channel/**"
-      ],
-      "matchDepTypes": [
-        "dependencies"
-      ],
-      "excludeUpdateTypes": [
-        "pin"
-      ],
-      "automerge": false
-    },
-    {
       "groupName": "blocknote packages",
       "matchSourceUrls": [
         "https://github.com/TypeCellOS/BlockNote"
