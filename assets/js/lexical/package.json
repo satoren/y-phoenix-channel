@@ -16,9 +16,9 @@
     "friendly-username-generator": "2.0.4",
     "lexical": "0.42.0",
     "phoenix": "1.8.5",
-    "react": "19.2.4",
+    "react": "19.2.5",
     "yjs": "13.6.30",
-    "react-dom": "19.2.4",
+    "react-dom": "19.2.5",
     "y-phoenix-channel": "0.2.1"
   }
 }
