@@ -14,13 +14,13 @@ defmodule YPhoenixWeb.Presence do
   end
 
   def handle_metas(topic, %{joins: joins, leaves: leaves}, presences, state) do
-    for {user_id, presence} <- joins do
+    for {user_id, _presence} <- joins do
       user_data = %{id: user_id, metas: Map.fetch!(presences, user_id)}
       msg = {__MODULE__, {:join, user_data}}
       Phoenix.PubSub.local_broadcast(YPhoenix.PubSub, "proxy:#{topic}", msg)
     end
 
-    for {user_id, presence} <- leaves do
+    for {user_id, _presence} <- leaves do
       metas =
         case Map.fetch(presences, user_id) do
           {:ok, presence_metas} -> presence_metas

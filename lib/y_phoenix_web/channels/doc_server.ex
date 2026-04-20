@@ -7,6 +7,7 @@ defmodule YPhoenixWeb.DocServer do
 
   @persistence YPhoenix.EctoPersistence
   @ttl 5_000
+  @awareness_throttle_ms 50
 
   @impl true
   def init(option, %{doc: doc} = state) do
@@ -28,7 +29,12 @@ defmodule YPhoenixWeb.DocServer do
        origin_clients_map: %{},
        user_count: user_count,
        persistance_state: persistance_state,
-       shutdown_timer_ref: nil
+       shutdown_timer_ref: nil,
+       awareness_throttle_ms: @awareness_throttle_ms,
+       awareness_window_open: false,
+       awareness_pending_clients: MapSet.new(),
+       awareness_pending_origin: :unset,
+       awareness_flush_timer_ref: nil
      })}
   end
 
@@ -71,24 +77,48 @@ defmodule YPhoenixWeb.DocServer do
         origin,
         state
       ) do
-    updated_clients = added ++ updated ++ removed
+    updated_clients = MapSet.new(added ++ updated ++ removed)
 
-    with {:ok, update} <- Awareness.encode_update(awareness, updated_clients),
-         {:ok, message} <- Sync.message_encode({:awareness, update}) do
-      broadcast_awareness_update(origin, state.assigns.topic, message)
+    state =
+      if origin do
+        monitor_and_update_origin_clients_map(state, origin, added, removed)
+      else
+        state
+      end
 
-      state =
-        if origin do
-          monitor_and_update_origin_clients_map(state, origin, added, removed)
-        else
-          state
-        end
+    if state.assigns.awareness_window_open do
+      pending_clients = MapSet.union(state.assigns.awareness_pending_clients, updated_clients)
+      pending_origin = merge_pending_origin(state.assigns.awareness_pending_origin, origin)
 
-      {:noreply, state}
+      {:noreply,
+       assign(state, %{
+         awareness_pending_clients: pending_clients,
+         awareness_pending_origin: pending_origin
+       })}
     else
-      error ->
-        Logger.log(:warning, error)
-        {:noreply, state}
+      with {:ok, update} <- Awareness.encode_update(awareness, MapSet.to_list(updated_clients)),
+           {:ok, message} <- Sync.message_encode({:awareness, update}) do
+        broadcast_awareness_update(origin, state.assigns.topic, message)
+
+        ref =
+          Process.send_after(
+            self(),
+            :flush_awareness,
+            state.assigns.awareness_throttle_ms
+          )
+
+        {:noreply,
+         assign(state, %{
+           awareness_window_open: true,
+           awareness_pending_clients: MapSet.new(),
+           awareness_pending_origin: :unset,
+           awareness_flush_timer_ref: ref
+         })}
+      else
+        error ->
+          Logger.log(:warning, error)
+          {:noreply, state}
+      end
     end
   end
 
@@ -133,7 +163,7 @@ defmodule YPhoenixWeb.DocServer do
     assign(state, %{origin_clients_map: origin_clients_map})
   end
 
-  def handle_info({:DOWN, ref, :process, pid, _reason}, state) do
+  def handle_info({:DOWN, _ref, :process, pid, _reason}, state) do
     origin_clients_map = state.assigns[:origin_clients_map] || %{}
 
     case Map.get(origin_clients_map, pid) do
@@ -158,7 +188,7 @@ defmodule YPhoenixWeb.DocServer do
     {:noreply, assign(state, :shutdown_timer_ref, nil)}
   end
 
-  def handle_info({Presence, {:leave, presence}}, state) do
+  def handle_info({Presence, {:leave, _presence}}, state) do
     user_count = state.assigns.user_count - 1
     state = assign(state, :user_count, user_count)
 
@@ -179,6 +209,40 @@ defmodule YPhoenixWeb.DocServer do
     {:noreply, state}
   end
 
+  def handle_info(:flush_awareness, state) do
+    pending_clients = MapSet.to_list(state.assigns.awareness_pending_clients)
+    topic = state.assigns.topic
+    trailing_origin = resolve_pending_origin(state.assigns.awareness_pending_origin)
+
+    if state.assigns.awareness_flush_timer_ref do
+      Process.cancel_timer(state.assigns.awareness_flush_timer_ref)
+    end
+
+    state =
+      assign(state, %{
+        awareness_window_open: false,
+        awareness_pending_clients: MapSet.new(),
+        awareness_pending_origin: :unset,
+        awareness_flush_timer_ref: nil
+      })
+
+    case pending_clients do
+      [] ->
+        {:noreply, state}
+
+      _ ->
+        with {:ok, update} <- Awareness.encode_update(state.awareness, pending_clients),
+             {:ok, message} <- Sync.message_encode({:awareness, update}) do
+          broadcast_awareness_update(trailing_origin, topic, message)
+          {:noreply, state}
+        else
+          error ->
+            Logger.log(:warning, error)
+            {:noreply, state}
+        end
+    end
+  end
+
   def handle_info(:delayed_shutdown, state) do
     if state.assigns.user_count <= 0 do
       {:stop, :shutdown, state}
@@ -189,6 +253,10 @@ defmodule YPhoenixWeb.DocServer do
 
   @impl true
   def terminate(_reason, state) do
+    if state.assigns.awareness_flush_timer_ref do
+      Process.cancel_timer(state.assigns.awareness_flush_timer_ref)
+    end
+
     @persistence.unbind(
       state.assigns.persistance_state,
       state.assigns.doc_name,
@@ -199,4 +267,13 @@ defmodule YPhoenixWeb.DocServer do
 
     :ok
   end
+
+  defp merge_pending_origin(:unset, origin), do: origin
+  defp merge_pending_origin(:mixed, _origin), do: :mixed
+  defp merge_pending_origin(origin, origin), do: origin
+  defp merge_pending_origin(_origin, _other_origin), do: :mixed
+
+  defp resolve_pending_origin(:unset), do: nil
+  defp resolve_pending_origin(:mixed), do: nil
+  defp resolve_pending_origin(origin), do: origin
 end
