@@ -153,6 +153,7 @@ const setupChannel = (provider: PhoenixChannelProvider, joinPush: Push) => {
         ),
         provider,
       );
+      provider.handleChannelClosed();
     });
 
     provider.channel.on("yjs", (data) => {
@@ -169,16 +170,17 @@ const setupChannel = (provider: PhoenixChannelProvider, joinPush: Push) => {
       },
     ]);
     const handleJoined = () => {
+      provider.handleChannelJoined();
       provider.emit("status", [
         {
           status: "connected",
         },
       ]);
 
-        if (hasHandledJoinInCurrentCycle) {
-          return;
-        }
-        hasHandledJoinInCurrentCycle = true;
+      if (hasHandledJoinInCurrentCycle) {
+        return;
+      }
+      hasHandledJoinInCurrentCycle = true;
 
       const encoder = encoding.createEncoder();
       encoding.writeVarUint(encoder, messageSync);
@@ -265,10 +267,20 @@ type Options = {
   /** Disable cross-tab BroadcastChannel communication */
   disableBc?: boolean;
   /**
+   * Delay calculator for rejoining when channel closes.
+   * Called with retry count starting at 1 and should return delay in milliseconds.
+   * Applied only when the provider creates its own channel (i.e. `channel` option is not provided).
+   */
+  rejoinBackoff?: false | RejoinBackoffOptions;
+  /**
    * External channel instance to use instead of creating a new one.
    * Useful when the channel is created outside the provider and the joined event cannot be received.
    */
   channel?: Channel;
+};
+
+type RejoinBackoffOptions = {
+  (tries: number): number;
 };
 
 /**
@@ -322,6 +334,9 @@ export class PhoenixChannelProvider extends ObservableV2<EventMap> {
   ) => void;
   _exitHandler: () => void;
   defaultChannel: Channel | undefined;
+  _rejoinBackoff: RejoinBackoffOptions | null;
+  _rejoinAttempt: number;
+  _rejoinTimer: ReturnType<typeof setTimeout> | null;
   /**
    */
   constructor(
@@ -337,6 +352,7 @@ export class PhoenixChannelProvider extends ObservableV2<EventMap> {
       updateThrottle = 0,
       awarenessThrottle = 0,
       disableBc = false,
+      rejoinBackoff = false,
     }: Options = {},
   ) {
     super();
@@ -357,6 +373,14 @@ export class PhoenixChannelProvider extends ObservableV2<EventMap> {
     this.wsUnsuccessfulReconnects = 0;
     this.messageHandlers = messageHandlers.slice();
     this.defaultChannel = defaultChannel;
+    this._rejoinBackoff =
+      rejoinBackoff === false
+        ? null
+        : typeof rejoinBackoff === "function"
+          ? rejoinBackoff
+          : (tries) => Math.min(500 * Math.pow(2, tries - 1), 10_000);
+    this._rejoinAttempt = 0;
+    this._rejoinTimer = null;
     this._updateThrottler = new Throttler<
       Uint8Array<ArrayBuffer>,
       Uint8Array<ArrayBuffer>[]
@@ -519,9 +543,57 @@ export class PhoenixChannelProvider extends ObservableV2<EventMap> {
     broadcastMessage(this, encoding.toUint8Array(encoder));
   }
 
+  handleChannelJoined() {
+    this.wsUnsuccessfulReconnects = 0;
+    this._rejoinAttempt = 0;
+    if (this._rejoinTimer != null) {
+      clearTimeout(this._rejoinTimer);
+      this._rejoinTimer = null;
+    }
+  }
+
+  handleChannelClosed() {
+    if (this._rejoinBackoff == null) {
+      return;
+    }
+    if (this.defaultChannel !== undefined) {
+      return;
+    }
+    if (!this.shouldConnect) {
+      return;
+    }
+    if (this._rejoinTimer != null) {
+      return;
+    }
+
+    const tries = this._rejoinAttempt + 1;
+    const computedDelayMs = this._rejoinBackoff(tries);
+    const delayMs = Number.isFinite(computedDelayMs)
+      ? Math.max(computedDelayMs, 0)
+      : 0;
+    this._rejoinAttempt += 1;
+    this.wsUnsuccessfulReconnects = this._rejoinAttempt;
+
+    this._rejoinTimer = setTimeout(() => {
+      this._rejoinTimer = null;
+      if (!this.shouldConnect || this.defaultChannel !== undefined) {
+        return;
+      }
+      if (this.channel != null) {
+        this.channel.leave();
+        this.channel = undefined;
+      }
+      this.connect();
+    }, delayMs);
+  }
+
   destroy() {
     if (this._resyncInterval != null) {
       clearInterval(this._resyncInterval);
+    }
+    if (this._rejoinTimer != null) {
+      clearTimeout(this._rejoinTimer);
+      this._rejoinTimer = null;
     }
     this._updateThrottler.destroy();
     this._awarenessThrottler.destroy();
@@ -598,6 +670,12 @@ export class PhoenixChannelProvider extends ObservableV2<EventMap> {
 
   disconnect() {
     this.shouldConnect = false;
+    if (this._rejoinTimer != null) {
+      clearTimeout(this._rejoinTimer);
+      this._rejoinTimer = null;
+    }
+    this._rejoinAttempt = 0;
+    this.wsUnsuccessfulReconnects = 0;
     this.disconnectBc();
     if (this.channel != null) {
       this.channel?.leave();

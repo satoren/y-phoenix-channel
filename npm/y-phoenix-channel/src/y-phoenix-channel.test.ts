@@ -206,6 +206,71 @@ describe('PhoenixChannelProvider', () => {
     })
   })
 
+  describe('rejoin backoff', () => {
+    it('should rejoin with delay on close when using internally created channel', () => {
+      vi.useFakeTimers()
+      try {
+        const localDoc = new Y.Doc()
+        const localProvider = new PhoenixChannelProvider(
+          socket,
+          'test-room',
+          localDoc,
+          {
+            connect: false,
+            rejoinBackoff: (tries) => Math.min(100 * Math.pow(2, tries - 1), 1000),
+          }
+        )
+
+        localProvider.connect()
+        expect(socket.channel).toHaveBeenCalledTimes(1)
+
+        ;(localProvider.channel as any)._triggerClose()
+
+        vi.advanceTimersByTime(99)
+        expect(socket.channel).toHaveBeenCalledTimes(1)
+
+        vi.advanceTimersByTime(1)
+        expect(socket.channel).toHaveBeenCalledTimes(2)
+
+        localProvider.destroy()
+        localDoc.destroy()
+      } finally {
+        vi.useRealTimers()
+      }
+    })
+
+    it('should not schedule rejoin when external channel option is provided', () => {
+      vi.useFakeTimers()
+      try {
+        const localDoc = new Y.Doc()
+        const externalChannel = createMockChannel('joined')
+        const localProvider = new PhoenixChannelProvider(
+          socket,
+          'test-room',
+          localDoc,
+          {
+            connect: false,
+            channel: externalChannel,
+            rejoinBackoff: (tries) => Math.min(100 * Math.pow(2, tries - 1), 1000),
+          }
+        )
+
+        localProvider.connect()
+        expect(socket.channel).not.toHaveBeenCalled()
+
+        ;(externalChannel as any)._triggerClose()
+        vi.advanceTimersByTime(1000)
+
+        expect(socket.channel).not.toHaveBeenCalled()
+
+        localProvider.destroy()
+        localDoc.destroy()
+      } finally {
+        vi.useRealTimers()
+      }
+    })
+  })
+
   describe('synced property', () => {
     it('should emit sync event when synced state changes', () => {
       return new Promise<void>((resolve) => {
