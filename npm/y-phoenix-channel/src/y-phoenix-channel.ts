@@ -162,6 +162,38 @@ const setupChannel = (provider: PhoenixChannelProvider, joinPush: Push) => {
         provider.channel?.push("yjs", encoding.toUint8Array(encoder).buffer);
       }
     });
+    provider.channel.on("yjs_resync", (data) => {
+      // When server is restarted, it will send "yjs_resync" message to notify clients to resync
+      const encoder = encoding.createEncoder();
+      encoding.writeVarUint(encoder, messageSync);
+      syncProtocol.writeSyncStep1(encoder, provider.doc);
+      provider.channel?.push("yjs_sync", encoding.toUint8Array(encoder).buffer);
+
+      // Also re-broadcast local awareness state, since server-side awareness is wiped on restart
+      if (provider.awareness.getLocalState() !== null) {
+        const encoderAwarenessState = encoding.createEncoder();
+        encoding.writeVarUint(encoderAwarenessState, messageAwareness);
+        encoding.writeVarUint8Array(
+          encoderAwarenessState,
+          awarenessProtocol.encodeAwarenessUpdate(provider.awareness, [
+            provider.doc.clientID,
+          ]),
+        );
+        provider.channel?.push(
+          "yjs",
+          encoding.toUint8Array(encoderAwarenessState).buffer,
+        );
+      }
+    });
+
+    provider.channel.on("yjs_server_down", () => {
+      // Server failed to restart the shared doc process. This is informational only.
+      // You may want to show a notification or handle reconnection logic here.
+      // For now, we just log it.
+      console.warn(
+        "yjs_server_down: server failed to restart shared doc process",
+      );
+    });
 
     provider.emit("status", [
       {
@@ -175,10 +207,10 @@ const setupChannel = (provider: PhoenixChannelProvider, joinPush: Push) => {
         },
       ]);
 
-        if (hasHandledJoinInCurrentCycle) {
-          return;
-        }
-        hasHandledJoinInCurrentCycle = true;
+      if (hasHandledJoinInCurrentCycle) {
+        return;
+      }
+      hasHandledJoinInCurrentCycle = true;
 
       const encoder = encoding.createEncoder();
       encoding.writeVarUint(encoder, messageSync);
