@@ -65,11 +65,27 @@ defmodule YPhoenixWeb.YDocRoomChannel do
 
   @impl true
   def handle_info(
-        {:DOWN, _ref, :process, _pid, _reason},
-        socket
+        {:DOWN, _ref, :process, pid, _reason},
+        %{assigns: %{doc_pid: pid, doc_name: doc_name}} = socket
       ) do
-    {:stop, {:error, "remote process crash"}, socket}
+    # Only handle :DOWN for the current doc_pid
+    topic = "y_doc_room:" <> doc_name
+    old_pid = pid
+
+    case start_shared_doc(topic, doc_name) do
+      {:ok, docpid} ->
+        Process.monitor(docpid)
+        push(socket, "yjs_resync", %{})
+        {:noreply, assign(socket, doc_pid: docpid)}
+
+      {:error, reason} ->
+        push(socket, "yjs_server_down", %{})
+        {:stop, {:error, "failed to restart shared doc: #{inspect(reason)}"}, socket}
+    end
   end
+
+  # Catch-all for unrelated :DOWNs (do nothing)
+  def handle_info({:DOWN, _ref, :process, _pid, _reason}, socket), do: {:noreply, socket}
 
   defp start_shared_doc(topic, doc_name) do
     case :syn.lookup(:doc_servers, doc_name) do
