@@ -11,7 +11,7 @@
   "author": "",
   "type": "module",
   "dependencies": {
-    "@excalidraw/excalidraw": "0.18.0",
+    "@excalidraw/excalidraw": "0.18.1",
     "friendly-username-generator": "2.0.4",
     "phoenix": "1.8.5",
     "y-indexeddb": "9.0.12",
