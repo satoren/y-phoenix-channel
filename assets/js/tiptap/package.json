@@ -18,8 +18,8 @@
     "@tiptap/y-tiptap": "3.0.3",
     "friendly-username-generator": "2.0.4",
     "phoenix": "1.8.7",
-    "react": "19.2.5",
-    "react-dom": "19.2.5",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
     "y-phoenix-channel": "0.3.0",
     "yjs": "13.6.30"
   }
