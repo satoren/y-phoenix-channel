@@ -11,10 +11,10 @@
   "author": "",
   "type": "module",
   "dependencies": {
-    "@lexical/react": "0.44.0",
-    "@lexical/yjs": "0.44.0",
+    "@lexical/react": "0.45.0",
+    "@lexical/yjs": "0.45.0",
     "friendly-username-generator": "2.0.4",
-    "lexical": "0.44.0",
+    "lexical": "0.45.0",
     "phoenix": "1.8.7",
     "react": "19.2.7",
     "yjs": "13.6.31",
