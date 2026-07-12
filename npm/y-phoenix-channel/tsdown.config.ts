@@ -1,8 +1,7 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from 'tsdown'
 
 export default defineConfig({
   entry: ['src/y-phoenix-channel.ts'],
-  splitting: false,
   sourcemap: true,
   clean: true,
   minify: false,
