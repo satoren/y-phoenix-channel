@@ -58,7 +58,7 @@ defmodule YPhoenix.MixProject do
       {:gettext, "1.0.2"},
       {:jason, "== 1.4.5"},
       {:dns_cluster, "0.2.0"},
-      {:bandit, "== 1.11.1"},
+      {:bandit, "== 1.12.0"},
       {:rustler, "== 0.38.0"},
       {:y_ex, "== 0.10.5"},
       {:syn, "== 3.4.1"}
