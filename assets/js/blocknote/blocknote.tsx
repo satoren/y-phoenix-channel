@@ -6,6 +6,8 @@ import { BlockNoteView } from "@blocknote/mantine";
 import * as Y from "yjs";
 import "@blocknote/mantine/style.css";
 
+import { withCollaboration } from "@blocknote/core/yjs";
+
 import { createRoot } from "react-dom/client";
 import { PhoenixChannelProvider } from "y-phoenix-channel";
 import { IndexeddbPersistence } from "y-indexeddb";
@@ -38,7 +40,7 @@ const usercolors = [
 const myColor = usercolors[Math.floor(Math.random() * usercolors.length)];
 export default function App() {
   // Creates a new editor instance.
-  const editor = useCreateBlockNote({
+  const editor = useCreateBlockNote(withCollaboration({
     collaboration: {
       provider,
       fragment: ydoc.getXmlFragment("document-store"),
@@ -48,7 +50,7 @@ export default function App() {
       },
     },
     // ...
-  });
+  }));
 
   // Renders the editor instance using a React component.
   return <BlockNoteView editor={editor} theme="light" />;
