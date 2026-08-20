@@ -15,7 +15,7 @@
     "@tiptap/extensions": "3.27.4",
     "@tiptap/react": "3.27.4",
     "@tiptap/starter-kit": "3.27.4",
-    "@tiptap/y-tiptap": "3.0.7",
+    "@tiptap/y-tiptap": "3.0.8",
     "friendly-username-generator": "2.0.4",
     "phoenix": "1.8.9",
     "react": "19.2.8",
