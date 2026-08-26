@@ -52,7 +52,7 @@ defmodule YPhoenix.MixProject do
        compile: false,
        depth: 1},
       {:swoosh, "== 1.26.3"},
-      {:finch, "== 0.22.0"},
+      {:finch, "== 0.23.0"},
       {:telemetry_metrics, "1.1.0"},
       {:telemetry_poller, "1.3.0"},
       {:gettext, "1.0.2"},
