@@ -17,7 +17,7 @@
     "@tiptap/starter-kit": "3.27.4",
     "@tiptap/y-tiptap": "3.0.8",
     "friendly-username-generator": "2.0.4",
-    "phoenix": "1.8.9",
+    "phoenix": "1.8.13",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "y-phoenix-channel": "0.3.0",
