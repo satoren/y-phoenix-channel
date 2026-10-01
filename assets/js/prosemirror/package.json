@@ -14,7 +14,7 @@
     "phoenix": "1.8.13",
     "prosemirror-example-setup": "1.2.3",
     "prosemirror-keymap": "1.2.3",
-    "prosemirror-schema-basic": "1.2.4",
+    "prosemirror-schema-basic": "1.2.5",
     "prosemirror-state": "1.4.4",
     "prosemirror-view": "1.41.8",
     "react": "19.2.8",
