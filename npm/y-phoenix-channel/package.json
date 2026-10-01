@@ -52,7 +52,7 @@
     "tsdown": "0.22.13",
     "happy-dom": "20.11.2",
     "typescript": "6.0.3",
-    "vitest": "4.1.10",
+    "vitest": "4.1.11",
     "yjs": "13.6.31",
     "msw-phoenix.channel-binding": "0.3.1"
   }
