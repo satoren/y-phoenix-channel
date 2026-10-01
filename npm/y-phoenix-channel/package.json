@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "y-protocols": "1.0.7",
-    "lib0": "0.2.117"
+    "lib0": "0.2.119"
   },
   "peerDependencies": {
     "phoenix": "^1",
