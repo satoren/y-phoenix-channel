@@ -19,7 +19,7 @@
     "prosemirror-view": "1.41.8",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "yjs": "13.6.31",
+    "yjs": "13.6.33",
     "y-prosemirror": "1.3.7",
     "y-phoenix-channel": "0.3.0"
   }
