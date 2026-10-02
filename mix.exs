@@ -57,7 +57,7 @@ defmodule YPhoenix.MixProject do
       {:telemetry_poller, "1.3.0"},
       {:gettext, "1.0.2"},
       {:jason, "== 1.4.5"},
-      {:dns_cluster, "0.2.0"},
+      {:dns_cluster, "== 0.3.1"},
       {:bandit, "== 1.12.5"},
       {:rustler, "== 0.38.0"},
       {:y_ex, "== 0.10.5"},
