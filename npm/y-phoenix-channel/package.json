@@ -50,7 +50,7 @@
     "@types/node": "24.13.3",
     "@types/phoenix": "1.6.7",
     "tsdown": "0.22.13",
-    "happy-dom": "20.11.2",
+    "happy-dom": "20.14.6",
     "typescript": "6.0.3",
     "vitest": "4.1.12",
     "yjs": "13.6.33",
