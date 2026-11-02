@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@types/node": "24.13.3",
-    "@types/phoenix": "1.6.7",
+    "@types/phoenix": "1.6.8",
     "tsdown": "0.22.13",
     "happy-dom": "20.11.2",
     "typescript": "6.0.3",
