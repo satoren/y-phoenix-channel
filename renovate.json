@@ -4,6 +4,10 @@
     "config:best-practices",
     ":pinAllExceptPeerDependencies"
   ],
+  "constraints": {
+    "erlang": "^29",
+    "elixir": "^1.20"
+  },
   "packageRules": [
     {
       "matchUpdateTypes": [
