@@ -5,7 +5,7 @@
     ":pinAllExceptPeerDependencies"
   ],
   "constraints": {
-    "erlang": "^29"
+    "erlang": "29.1.2"
   },
   "packageRules": [
     {
