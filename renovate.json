@@ -4,6 +4,9 @@
     "config:best-practices",
     ":pinAllExceptPeerDependencies"
   ],
+  "constraints": {
+    "erlang": "^29"
+  },
   "packageRules": [
     {
       "matchUpdateTypes": [
