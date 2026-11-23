@@ -51,7 +51,7 @@
     "@types/phoenix": "1.6.8",
     "tsdown": "0.22.13",
     "happy-dom": "21.0.4",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "vitest": "5.1.1",
     "yjs": "13.6.33",
     "msw-phoenix.channel-binding": "0.3.1"
