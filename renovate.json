@@ -5,9 +5,16 @@
     ":pinAllExceptPeerDependencies"
   ],
   "constraints": {
-    "erlang": "29.1.2"
+    "erlang": "^29"
   },
   "packageRules": [
+    {
+      "description": "Keep tool constraints as ranges. containerbase publishes 4-part Erlang versions (e.g. 29.1.2.0), so a pinned 3-part version like 29.1.2 cannot be installed and mix.lock updates fail.",
+      "matchDepTypes": [
+        "tool-constraint"
+      ],
+      "rangeStrategy": "replace"
+    },
     {
       "matchUpdateTypes": [
         "patch",
