@@ -12,7 +12,7 @@
   "type": "module",
   "dependencies": {
     "phoenix": "1.8.17",
-    "prosemirror-example-setup": "1.2.3",
+    "prosemirror-example-setup": "1.2.4",
     "prosemirror-keymap": "1.2.3",
     "prosemirror-schema-basic": "1.2.5",
     "prosemirror-state": "1.4.4",
