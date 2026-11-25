@@ -49,7 +49,7 @@
   "devDependencies": {
     "@types/node": "24.13.3",
     "@types/phoenix": "1.6.8",
-    "tsdown": "0.22.13",
+    "tsdown": "0.23.7",
     "happy-dom": "21.0.4",
     "typescript": "7.0.2",
     "vitest": "5.1.1",
