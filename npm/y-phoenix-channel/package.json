@@ -47,7 +47,7 @@
     "yjs": "^13"
   },
   "devDependencies": {
-    "@types/node": "24.13.3",
+    "@types/node": "26.6.10",
     "@types/phoenix": "1.6.8",
     "tsdown": "0.22.13",
     "happy-dom": "21.0.4",
